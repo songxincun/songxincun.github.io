@@ -1,0 +1,19 @@
+# Site settings
+title: 宋新村的博客
+email: your-email@domain.com
+description: "记录思绪的点点滴滴"
+baseurl: ""
+url: "http://yourdomain.com"
+github_username:  songxincun
+
+# Build settings
+markdown: redcarpet
+redcarpet:
+  extensions:
+    - hard_wrap
+    - no_intra_emphasis
+    - autolink
+    - strikethrough
+    - fenced_code_blocks
+
+permalink: pretty
