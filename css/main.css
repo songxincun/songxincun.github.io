@@ -243,13 +243,13 @@ a:visited { color: #205caa; }
   line-height: 150%;
   color: #000; 
   background: #EEF0EB;
-  zoom: 1;
+  zoom: 1; 
 }
 
 .post code { padding: 1px 5px; }
 
 .post ul,
-.post ol { margin-left: 1.35em; }
+/* .post ol { margin-left: 1.35em; } */
 
 .post pre code {
   border: 0;

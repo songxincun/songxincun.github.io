@@ -2,7 +2,7 @@
 layout: post
 title:  "大数据解决方案"
 date:   2014-08-16 16:20:43
-categories: bigdata 大数据
+categories: bigdata
 ---
 
 ### 日志收集
