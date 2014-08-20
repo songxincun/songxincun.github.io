@@ -152,6 +152,7 @@ a:visited { color: #205caa; }
 .posts { list-style-type: none; }
 
 .posts li { margin-bottom: 30px; }
+ol>li { margin-bottom: 7px; }
 
 .posts .post-link {
   font-size: 24px;
@@ -232,6 +233,7 @@ a:visited { color: #205caa; }
 .post code {
   border: 1px dotted #b7c4d3;
   background-color: #f5f5f5;
+  margin-bottom: 3px; 
   padding: 1px 5px;
   /* -webkit-border-radius: 3px; */
   /* -moz-border-radius: 3px; */
@@ -416,4 +418,8 @@ a:visited { color: #205caa; }
     width: auto;
     margin: 0 0 15px; }
 
+}
+
+strong {
+    color: red;
 }

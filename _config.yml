@@ -15,5 +15,10 @@ redcarpet:
     - autolink
     - strikethrough
     - fenced_code_blocks
+    - disable_indented_code_blocks
+    - underline
+    - space_after_headers
+    - superscript
+    - footnotes
 
 permalink: pretty

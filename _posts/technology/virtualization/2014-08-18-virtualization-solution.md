@@ -5,8 +5,8 @@ date:   2014-08-18 17:45:43
 categories: virtualization
 ---
 
-1. cgroups    
-   Linux 内核支持的一个功能，用于限制和隔离一个进程组资源（包括：CPU、内存、磁盘）   
+1. cgroups
+   Linux 内核支持的一个功能，用于限制和隔离一个进程组资源（包括：CPU、内存、磁盘）
    [cgroups 维基百科介绍](http://zh.wikipedia.org/wiki/Cgroups)
 
 2. LXC
@@ -17,11 +17,15 @@ categories: virtualization
    完全虚拟化的一个虚拟机软件，能虚拟各种操作系统，资源利用率应该不会很高（我自己认为的）
    [VirtualBox 维基百科介绍](http://zh.wikipedia.org/wiki/VirtualBox)
 
+4. Openvz
+   Linux 下完全虚拟化的一个虚拟机
+   [Openvz 维基百科介绍](http://zh.wikipedia.org/wiki/OpenVZ)
+
 4. Vagrant
-   基于 VirtualBox 等虚拟机之上的一种虚拟技术，我理解它的优势就是可以在 Linux 命令行下使用一个完全的虚拟机（待验证）
+   基于 VirtualBox 等虚拟机之上的一种虚拟技术，类似于 Ghost?
 
 5. Docker
-   集装箱的概念
+   集装箱的概念，不完全虚拟化，所以性能会比 Openvz、Vagrant 等要高，好像类似于 Matrix 他们搞的一样
 
 6. Puppet
 
