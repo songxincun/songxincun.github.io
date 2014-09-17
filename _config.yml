@@ -10,6 +10,7 @@ github_username:  songxincun
 markdown: redcarpet
 redcarpet:
   extensions:
+    - tables
     - hard_wrap
     - no_intra_emphasis
     - autolink
