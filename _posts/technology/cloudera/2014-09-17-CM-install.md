@@ -18,19 +18,19 @@ Cloudera Manager（以下简称 CM）安装主要是针对 CM Server 及 CM Agen
 
 3. 通过 tar 文件来离线安装
    其实就是将一个已有的 tar 包解压缩，修改下配置，然后起服务。对比上面两种方式的优点是：
-        * 完全离线
-        * 一切自己定制，包括 JDK、数据库、文件路径，由于 yum 方式安装最终的程序是放在 ROOT 分区下的，日志也是打在 ROOT 分区下，所以有将 ROOT 分区打满的危险
+    * 完全离线
+    * 一切自己定制，包括 JDK、数据库、文件路径，由于 yum 方式安装最终的程序是放在 ROOT 分区下的，日志也是打在 ROOT 分区下，所以有将 ROOT 分区打满的危险
 
 下面分别介绍 CM Server 及 CM Agent 安装的具体方法：
 
 ### CM Server
 #### 一、bin 文件方式安装
-通过 bin 文件方式安装，你可能需要通过配置一个本地 yum 源来提高安装的速度及可靠性，具体的方法可以参见：[如何为 Cloudera 建立本地 yum 源](http://localhost:4000/cloudera/yum/2014/09/18/how-to-create-yum-source-for-cloudera/)
+通过 bin 文件方式安装，你可能需要通过配置一个本地 yum 源来提高安装的速度及可靠性，具体的方法可以参见：[如何为 Cloudera 建立本地 yum 源](/cloudera/yum/2014/09/18/how-to-create-yum-source-for-cloudera/)
 
 然后就是运行 bin 文件安装就行了，安装完成之后可以通过 7180 端口来访问服务，安装过程中出现的错误，可以通过查看弹窗上面给出的日志来进行排查
 
 #### 二、yum 方式安装
-通过 yum 方式安装，你可能需要通过配置一个本地 yum 源来提高安装的速度及可靠性，具体的方法可以参见：[如何为 Cloudera 建立本地 yum 源](http://localhost:4000/cloudera/yum/2014/09/18/how-to-create-yum-source-for-cloudera/)
+通过 yum 方式安装，你可能需要通过配置一个本地 yum 源来提高安装的速度及可靠性，具体的方法可以参见：[如何为 Cloudera 建立本地 yum 源](/cloudera/yum/2014/09/18/how-to-create-yum-source-for-cloudera/)
 
 之后就可以通过 yum 命令来安装了，可以通过 yum search cloudera-manager 命令来列出所有提供的包
 
@@ -53,7 +53,8 @@ Cloudera Manager（以下简称 CM）安装主要是针对 CM Server 及 CM Agen
 如果是采用 MySQL 数据库，则还需要自己弄一个 JDBC 库，方法很简单，copy 一个 mysql-connector-java-X.X.XX.jar 包到 /usr/share/cmf/lib/ 路径下即可
 
 #### 三、tar 方式安装
-4.8 版本 Cloudera Manager 压缩包地址：[http://archive.cloudera.com/cm4/cm/4/cloudera-manager-el6-cm4.8.1_x86_64.tar.gz](http://archive.cloudera.com/cm4/cm/4/cloudera-manager-el6-cm4.8.1_x86_64.tar.gz)
+4.8 版本 Cloudera Manager 压缩包地址：
+[http://archive.cloudera.com/cm4/cm/4/cloudera-manager-el6-cm4.8.1_x86_64.tar.gz](http://archive.cloudera.com/cm4/cm/4/cloudera-manager-el6-cm4.8.1_x86_64.tar.gz)
 
 Down 下来之后解压到自己想要的目录，解压后得到的文件夹的目录结构如下：
 
@@ -87,7 +88,7 @@ share   /usr/share
 
 ### CM Agent
 #### 一、通过 CM Server 的 Web 界面安装
-通过 Web 界面方式安装，你可能需要通过配置一个本地 yum 源来提高安装的速度及可靠性，具体的方法可以参见：[如何为 Cloudera 建立本地 yum 源](http://localhost:4000/cloudera/yum/2014/09/18/how-to-create-yum-source-for-cloudera/)
+通过 Web 界面方式安装，你可能需要通过配置一个本地 yum 源来提高安装的速度及可靠性，具体的方法可以参见：[如何为 Cloudera 建立本地 yum 源](/cloudera/yum/2014/09/18/how-to-create-yum-source-for-cloudera/)
 
 如果是一个全新的系统，没有添加任何集群，则 "服务" --> "所有服务" --> "添加集群"
 如果已有集群，则点击 "主机" 然后 "向群集添加新机器"
@@ -95,10 +96,10 @@ share   /usr/share
 记得在 "选择存储库" 的时候选择 "自定义存储库" 然后添加本地 yum 库地址
 
 需要注意的是，这种 Web 方式的安装也会同时将 CDH 给装上
-安装 CDH 的步骤及注意事项参考：[CDH 安装手册](http://localhost:4000/cloudera/2014/09/18/CDH-install/)
+安装 CDH 的步骤及注意事项参考：[CDH 安装手册](/cloudera/2014/09/18/CDH-install/)
 
 #### 二、yum 方式安装
-通过 yum 方式安装，你可能需要通过配置一个本地 yum 源来提高安装的速度及可靠性，具体的方法可以参见：[如何为 Cloudera 建立本地 yum 源](http://localhost:4000/cloudera/yum/2014/09/18/how-to-create-yum-source-for-cloudera/)
+通过 yum 方式安装，你可能需要通过配置一个本地 yum 源来提高安装的速度及可靠性，具体的方法可以参见：[如何为 Cloudera 建立本地 yum 源](/cloudera/yum/2014/09/18/how-to-create-yum-source-for-cloudera/)
 
 之后就可以通过 yum 命令来安装了，可以通过 yum search cloudera-manager 命令来列出所有提供的包
 
