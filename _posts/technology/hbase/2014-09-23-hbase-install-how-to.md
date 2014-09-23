@@ -8,8 +8,8 @@ categories: hbase
 HBase 组件主要有：zookeeper、hadoop（HDFS + MapRed）、hbase
 zookeeper 和 hadoop 是完全独立的（对于 hadoop 1.0 而言），可以独立安装及配置，详见：
 
-   * [Zookeeper 安装记录](http://songxincun.github.io/zookeeper/2014/09/24/zookeeper-install-how-to/)
-   * [Hadoop 安装记录](http://songxincun.github.io/hadoop/2014/09/24/hadoop-install-how-to/)
+   * [Zookeeper 安装记录](http://songxincun.github.io/zookeeper/2014/09/23/zookeeper-install-how-to/)
+   * [Hadoop 安装记录](http://songxincun.github.io/hadoop/2014/09/23/hadoop-install-how-to/)
 
 hbase 的配置中则需要依赖 zookeeper 和 hadoop
 
