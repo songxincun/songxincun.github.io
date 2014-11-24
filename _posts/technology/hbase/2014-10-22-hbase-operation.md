@@ -31,6 +31,8 @@ hbase/bin/graceful_stop.sh --restart --reload --debug $host
 非常蛋疼的一件事情是：这个 graceful 重启在本机针对本机进行的时候，需要输入 ssh 密码...
 所以得在中控机利用信任关系进行重启...
 
+整个重启过程异常的慢，一整天时间才重启了90多台机器
+
 
 [jekyll-gh]: https://github.com/jekyll/jekyll
 [jekyll]:    http://jekyllrb.com

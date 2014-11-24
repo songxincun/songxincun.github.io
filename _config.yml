@@ -22,4 +22,4 @@ redcarpet:
     - superscript
     - footnotes
 
-permalink: pretty
+permalink: /blog/:year/:month/:day/:title
