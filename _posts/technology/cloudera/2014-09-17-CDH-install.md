@@ -19,7 +19,7 @@ categories: cloudera
 
 已经解决的可能出现的 case 有：
 
-* [Cloudera TaskTracker 启动失败问题追查记录](/cloudera/2014/09/17/cloudera-tasktracker-start-error/)
+* [Cloudera TaskTracker 启动失败问题追查记录](/blog/2014/09/17/cloudera-tasktracker-start-error/)
 
 [jekyll-gh]: https://github.com/jekyll/jekyll
 [jekyll]:    http://jekyllrb.com
