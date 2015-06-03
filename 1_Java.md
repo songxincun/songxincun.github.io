@@ -1,5 +1,7 @@
 ---
-layout: default
+layout: page
+title: Java
+permalink: /java/
 ---
 
 <div class="home">
@@ -7,7 +9,7 @@ layout: default
   <h1>Posts</h1>
 
   <ul class="posts">
-    {% for post in site.posts %}
+    {% for post in site.categories.java %}
       <li>
       <span class="post-date">{{ post.date | date: "%b %-d, %Y" }}</span>
         <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
