@@ -13,4 +13,3 @@ libc.so 是 Linux 下的基本库，误删之后，所有的程序都跑不了�
 
 [jekyll-gh]: https://github.com/jekyll/jekyll
 [jekyll]:    http://jekyllrb.com
-
