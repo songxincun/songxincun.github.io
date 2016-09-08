@@ -5,7 +5,7 @@ date:   2016-09-08 14:14:42
 categories: c
 ---
 
-Very Good!!!
+YES!!!, Very Good!!!
 
 [jekyll-gh]: https://github.com/jekyll/jekyll
 [jekyll]:    http://jekyllrb.com
