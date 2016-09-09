@@ -27,3 +27,15 @@ redcarpet:
     - footnotes
 
 permalink: /blog/:year/:month/:day/:title
+
+atom:
+  buildCommand:
+    - jekyll
+    - build
+    - --option
+    - --this
+  buildEnv:
+    JEKYLL_ENV: development
+  postDirs:
+    - _newsletters
+  defaultPostDir: _drafts
