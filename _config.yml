@@ -7,7 +7,7 @@ url: "http://yourdomain.com"
 github_username:  songxincun
 
 # Build settings
-markdown: redcarpet
+markdown: kramdown
 redcarpet:
   extensions:
     - tables

@@ -24,8 +24,10 @@ categories:
 2. 可以通过 git-plus 来同 github 通信
 3. 可以通过 sync-on-save 来配置成自动在保存文件的时候同步到 github
 4. 可以通过 markdown-writer 来优化博客的编写，这个插件可以定制 jekyll 的编写引擎，方便尤其是在图片、表格和超链接方面更加的方便了
+5. jekyll 可以更加方便的使用 jekyll
 
 上述方案过程中遇到的坑如下：
+
 - git-plus 和 sync-on-save 都是通过调用原生的 git 命令来操作的，所以使用前首先需要配置好 git.exe 的路径给他们。可以通过配置 windows 的 PATH 环境变量来完成
 - Github windows 的客户端默认是通过 https 来拉取仓库的，而 git-plus 和 sync-on-save 在通过 https push 的时候会有问题（主要是在输入用户名密码的时候不兼容 windows），所以要通过 ssh 免密码来同步
     - 自己用 Git-bash 通过 ssh 的方式来将仓库拉下来，这样后续 push 的时候也是通过 ssh 了
