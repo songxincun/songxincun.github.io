@@ -7,13 +7,14 @@ categories:
 ---
 
 编写技术博客要考虑的几个点：
-    * 要云和本地，多机备份方便：Github
-    * 要格式简单不过度依赖某个固定的格式：Markdown
+
+- 要云和本地，多机备份方便：Github
+- 要格式简单不过度依赖某个固定的格式：Markdown
 
 前面两点确定了 Github + Jekyll 的解决方案。然后接下来是用哪个编辑器呢：
 
-    - 能够方便的 push git
-    - 可以本地很方便的预览编辑 Markdown
+- 能够方便的 push git
+- 可以本地很方便的预览编辑 Markdown
 
 考虑过以下很多的方案：
 
@@ -22,6 +23,7 @@ categories:
 - Eclipse 和 Inteliji，对 git 友好，但是对 Markdown 不友好
 
 最后，atom 可以完美的通过各自插件解决这个问题：
+
 1. 原生支持 Markdown，可以通过 Ctrl+Shift+M 调出来 Markdown 预览页面
 2. 可以通过 git-plus 来同 github 通信
 3. 可以通过 sync-on-save 来配置成自动在保存文件的时候同步到 github
@@ -36,6 +38,7 @@ categories:
     - 自己用 Git-bash 通过 ssh 的方式来将仓库拉下来，这样后续 push 的时候也是通过 ssh 了
     - ssh 免密码：通过 Git-bash 查看 ~/.ssh 下面有没有生成好的私钥，如果有就算了，没有就自己生成，同步到 Github 网站。用 ssh -T git@github.com 来测试连接
     - sync-on-save 插件有一个 bug，push 的时候会提示 git: not a command for git, 解决方法：通过 Ctrl+Alt+I 调出来调试窗口，然后将文件：command-runner.coffee 里面的
+
 ``` coffee
   getArgs: ->
   if @_needsWorkaround()
@@ -49,6 +52,7 @@ categories:
     [@command]
 ```
     改成
+
 ``` coffee
   getArgs: ->
   #if @_needsWorkaround()
@@ -62,6 +66,7 @@ categories:
   #  [@command]
    @args
 ```
+
     就可以了
     - 内外 ssh 到外网是有防火墙的，需要配置代理，具体参看内外文章
 
