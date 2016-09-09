@@ -8,6 +8,10 @@ github_username:  songxincun
 
 # Build settings
 markdown: kramdown
+kramdown:
+    input: GFM
+highlight: rouge
+
 redcarpet:
   extensions:
     - tables

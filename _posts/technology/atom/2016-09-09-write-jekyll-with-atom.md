@@ -7,14 +7,16 @@ categories:
 ---
 
 编写技术博客要考虑的几个点：
-- 要云和本地，多机备份方便：Github
-- 要格式简单不过度依赖某个固定的格式：Markdown
+    * 要云和本地，多机备份方便：Github
+    * 要格式简单不过度依赖某个固定的格式：Markdown
 
 前面两点确定了 Github + Jekyll 的解决方案。然后接下来是用哪个编辑器呢：
-- 能够方便的 push git
-- 可以本地很方便的预览编辑 Markdown
+
+    - 能够方便的 push git
+    - 可以本地很方便的预览编辑 Markdown
 
 考虑过以下很多的方案：
+
 - Markdownpad，支持可视化编辑 Markdown，对 git 不友好
 - Sublime Text，对 Markdown 和 git 好像都不太友好
 - Eclipse 和 Inteliji，对 git 友好，但是对 Markdown 不友好
@@ -24,7 +26,8 @@ categories:
 2. 可以通过 git-plus 来同 github 通信
 3. 可以通过 sync-on-save 来配置成自动在保存文件的时候同步到 github
 4. 可以通过 markdown-writer 来优化博客的编写，这个插件可以定制 jekyll 的编写引擎，方便尤其是在图片、表格和超链接方面更加的方便了
-5. jekyll 可以更加方便的使用 jekyll
+5. markdown-writer 还是不够图形化，如果再安装一个 tool-bar-markdown-writer 就屌了，不过这个插件需要配合 tool-bar 这个插件来使用
+6. jekyll 可以更加方便的使用 jekyll
 
 上述方案过程中遇到的坑如下：
 
