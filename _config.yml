@@ -26,4 +26,4 @@ redcarpet:
     - superscript
     - footnotes
 
-permalink: /blog/:year/:month/:day/:title
+permalink: /_site/blog/:year/:month/:day/:title
