@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>HBase</title>
+    <title>虚拟化技术解决方案</title>
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="记录思绪的点点滴滴">
     <meta name="baidu-site-verification" content="CibWhF6Kxz" />
     <meta name="google-site-verification" content="pi6a8hODkaYkCKbWh0HqCs2h1OFNs7yklG8wW-VC9Fs" />
-    <link rel="canonical" href="http://yourdomain.com/hbase/">
+    <link rel="canonical" href="http://yourdomain.com/_site/blog/2014/08/19/virtualization-solution">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/main.css">
@@ -64,50 +64,93 @@
       <div class="post">
 
   <header class="post-header">
-    <h1>HBase</h1>
+    <h1>虚拟化技术解决方案</h1>
+    <p class="meta">Aug 19, 2014</p>
   </header>
 
   <article class="post-content">
-  <div class="home">
+  <ol>
+  <li>
+    <p>cgroups
+Linux 内核支持的一个功能，用于限制和隔离一个进程组资源（包括：CPU、内存、磁盘）
+<a href="http://zh.wikipedia.org/wiki/Cgroups">cgroups 维基百科介绍</a></p>
+  </li>
+  <li>
+    <p>LXC
+Linux Containers (LXC) 是 Linux 内核的一个容器功能接口，它使得 Linux 用户可以容易的创建和管理系统或应用容器
+<a href="http://zh.wikipedia.org/wiki/Linux_Containers">LXC 维基百科介绍</a></p>
+  </li>
+  <li>
+    <p>VirtualBox
+完全虚拟化的一个虚拟机软件，能虚拟各种操作系统，资源利用率应该不会很高（我自己认为的）
+<a href="http://zh.wikipedia.org/wiki/VirtualBox">VirtualBox 维基百科介绍</a></p>
+  </li>
+  <li>
+    <p>Openvz
+Linux 下完全虚拟化的一个虚拟机
+<a href="http://zh.wikipedia.org/wiki/OpenVZ">Openvz 维基百科介绍</a></p>
+  </li>
+  <li>
+    <p>Vagrant
+基于 VirtualBox 等虚拟机之上的一种虚拟技术，类似于 Ghost?</p>
+  </li>
+  <li>
+    <p>Docker
+集装箱的概念，不完全虚拟化，所以性能会比 Openvz、Vagrant 等要高，好像类似于 Matrix 他们搞的一样</p>
+  </li>
+  <li>
+    <p>Puppet</p>
+  </li>
+  <li>
+    <p>Chef</p>
+  </li>
+  <li>
+    <p>apt-get, yum, pacman 等包管理工具</p>
+  </li>
+</ol>
 
-  <h1>Posts</h1>
-
-  <ul class="posts">
-    
-      <li>
-      <span class="post-date">Nov 9, 2014</span>
-        <a class="post-link" href="/_site/blog/2014/11/09/hbase-shell">HBase Shell 命令</a>
-      </li>
-    
-      <li>
-      <span class="post-date">Oct 22, 2014</span>
-        <a class="post-link" href="/_site/blog/2014/10/22/hbase-operation">HBase 操作记录</a>
-      </li>
-    
-      <li>
-      <span class="post-date">Oct 10, 2014</span>
-        <a class="post-link" href="/_site/blog/2014/10/10/happybase">happybase</a>
-      </li>
-    
-      <li>
-      <span class="post-date">Sep 24, 2014</span>
-        <a class="post-link" href="/_site/blog/2014/09/24/hbase-install-how-to">HBase 安装记录</a>
-      </li>
-    
-      <li>
-      <span class="post-date">Sep 11, 2014</span>
-        <a class="post-link" href="/_site/blog/2014/09/11/hbase-install-remind">HBase 安装注意事项</a>
-      </li>
-    
-  </ul>
-
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
-
-</div>
 
   </article>
 
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); 
+      
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+     
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); 
+
+        s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+
+
       </div>
     </div>
 

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>我的 awk</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="记录思绪的点点滴滴">
+    <meta name="baidu-site-verification" content="CibWhF6Kxz" />
+    <meta name="google-site-verification" content="pi6a8hODkaYkCKbWh0HqCs2h1OFNs7yklG8wW-VC9Fs" />
+    <link rel="canonical" href="http://yourdomain.com/_site/blog/2014/08/20/my-awk">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+</head>
+
+
+    <body>
+
+    <header class="site-header">
+
+  <div class="wrap">
+
+    <a class="site-title" href="/">像少年啦飞驰</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+           viewBox="0 0 18 15" enable-background="new 0 0 18 15" xml:space="preserve">
+          <path fill="#505050" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0
+            h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#505050" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484
+            h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#505050" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0
+            c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+      <div class="trigger">
+        
+          <a class="page-link" href="/java/">Java</a>
+        
+          <a class="page-link" href="/hadoop/">Hadoop</a>
+        
+          <a class="page-link" href="/hbase/">HBase</a>
+        
+          <a class="page-link" href="/about/">About</a>
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrap">
+      <div class="post">
+
+  <header class="post-header">
+    <h1>我的 awk</h1>
+    <p class="meta">Aug 20, 2014</p>
+  </header>
+
+  <article class="post-content">
+  <ol>
+  <li>
+    <p>awk 主要结构</p>
+
+    <pre><code class="language-awk">Pattern1 { Action1 }
+Pattern2 { Action2 }
+Pattern3 { Action3 }
+...
+</code></pre>
+  </li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>Patterns 是”关系判断式”, 也就是 bool 型的式子吗. 可以用 &amp;&amp;</td>
+          <td> </td>
+          <td>! 来修饰. 还可以这样用:</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <pre><code class="language-awk">Pattern1, Pattern2 { Actions }
+</code></pre>
+    <p>这样表示从 Pattern1 成立直到 Pattern2 不成立. 执行 Actions. 如果条件重复出现, 则也会重复执行.</p>
+  </li>
+  <li>
+    <p>~ 与 !~ 分别表示”匹配”与”不匹配”, A ~ B 表示 A 中包含符合正则表达式 B 的子字符串.</p>
+  </li>
+  <li>
+    <p>awk 中的数组, 其实也就是 Python 里的字典吗. 可以用字符串来索引, 可随时扩充数组的内容, 且自动初始化为空. 遍历数组的方法就是 (跟 Python 一样):</p>
+
+    <pre><code class="language-awk">for (i in array)
+{
+    do something for array[i];    /* 注意: i 只是索引, 所以要取值!!! */
+}
+</code></pre>
+  </li>
+  <li>
+    <p>跟 shell 交互.</p>
+
+    <pre><code class="language-awk">"命令" | getline var
+</code></pre>
+
+    <p>表示读入一行命令执行的结果保存到 var 中, 如果没有提供 var 则默认读到 $0, 一次只会读入一行, 读到最后了没得读了, 就会返回一个空的值(false).</p>
+
+    <pre><code class="language-awk">printf() | "命令"
+   print | "命令"
+</code></pre>
+
+    <p>表示将打印出的结果送到命令中执行. 注意: 打印出来的语句不会马上就经过命令执行, 而是会先累积, 直到程序结束时才一并送到对应的命令, 可以用 close(“命令”) 来提前执行命令, 如果”命令”里的字符串不一样, 哪怕功能是一样的也认为是不同的. 建议就是用个变量保存命令.</p>
+
+    <p>还有就是要注意 ‘&gt;’ 重定向符.</p>
+
+    <pre><code class="language-awk">printf() &gt; file
+print    &gt; file
+</code></pre>
+
+    <p>由于在 awk 中重定向是程序结束之后才进行, 所以 ‘&gt;’ 不像 shell 里的那样, 不会清空 file 而是会用打印的内容覆盖掉原来的 file.</p>
+  </li>
+  <li>
+    <p>-v 命令选项可以从命令列表中获取变量的值.</p>
+  </li>
+  <li>
+    <p>函数是在 Pattern { Actions } 之外定义的.</p>
+
+    <pre><code class="language-awk">Pattern1 { Actions1 }
+Pattern2 { Actions2 }
+Pattern3 { Actions3 }
+...
+function f(a1, a2, a3)
+{
+    return (...);
+}
+</code></pre>
+  </li>
+  <li>
+    <p>AWK 的变量的作用范围, 除了函数的参数之外, 都是全局的…. 所以用递归就蛋疼了~~~.</p>
+  </li>
+  <li>
+    <p>AWK 中的字符串拼接. 直接列在一起就行了:</p>
+
+    <pre><code class="language-awk">A = "This "
+B = "is a "
+C = A B "key."
+
+C: This is a key.
+</code></pre>
+  </li>
+  <li>
+    <p>awk -f 函数包文件名. 可以将函数包文件名中的函数引用过来, 就可以用其中的函数了.</p>
+  </li>
+  <li>AWK 中的变量是直接引用的, 不需要加一个 ‘$’</li>
+  <li>next: 不再执行接下来的指令了, 直接读下一行文件. exit: 退出 awk 程序.</li>
+  <li>delete: 删除某个数组元素.</li>
+  <li>
+    <p>内置变量:</p>
+
+    <pre><code class="language-awk">ARGC        命令列表上除 -F, -v, -f 及其对应的参数外的所有参数的个数.
+ARGV[]      对应 ARGC
+FILENAME    处理的文件名, 貌似 BEGIN 之后才能访问到~~~.
+
+FS          栏位分隔符: FS = "[: \t]+"
+NR          AWK 开始执行到现在所读入的资料列数, 如有多个文件, 会累加的.
+FNR         同 NR 的区别就是多个文件不会累加.
+NF          表当前读入的行包含的栏位数.
+RS          行分隔符, RS = ""(空字符串) 表示以空行为行分隔符.
+</code></pre>
+  </li>
+</ol>
+
+
+  </article>
+
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); 
+      
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+     
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); 
+
+        s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrap">
+
+    <h2 class="footer-heading">像少年啦飞驰</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>像少年啦飞驰</li>
+        <li><a href="mailto:your-email@domain.com">your-email@domain.com</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col-2 column">
+      <ul>
+        <li>
+          <a href="https://github.com/songxincun">
+            <span class="icon github">
+              <svg version="1.1" class="github-icon-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#C2C2C2" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761
+                c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32
+                c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472
+                c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037
+                C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65
+                c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261
+                c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082
+                c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129
+                c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <span class="username">songxincun</span>
+          </a>
+        </li>
+        
+      </ul>
+    </div>
+
+    <div class="footer-col-3 column">
+      <p class="text">记录思绪的点点滴滴</p>
+    </div>
+
+  </div>
+
+</footer>
+
+
+    </body>
+</html>

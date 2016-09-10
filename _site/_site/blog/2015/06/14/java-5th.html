@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>第五章：面向对象（上）</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="记录思绪的点点滴滴">
+    <meta name="baidu-site-verification" content="CibWhF6Kxz" />
+    <meta name="google-site-verification" content="pi6a8hODkaYkCKbWh0HqCs2h1OFNs7yklG8wW-VC9Fs" />
+    <link rel="canonical" href="http://yourdomain.com/_site/blog/2015/06/14/java-5th">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+</head>
+
+
+    <body>
+
+    <header class="site-header">
+
+  <div class="wrap">
+
+    <a class="site-title" href="/">像少年啦飞驰</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+           viewBox="0 0 18 15" enable-background="new 0 0 18 15" xml:space="preserve">
+          <path fill="#505050" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0
+            h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#505050" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484
+            h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#505050" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0
+            c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+      <div class="trigger">
+        
+          <a class="page-link" href="/java/">Java</a>
+        
+          <a class="page-link" href="/hadoop/">Hadoop</a>
+        
+          <a class="page-link" href="/hbase/">HBase</a>
+        
+          <a class="page-link" href="/about/">About</a>
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrap">
+      <div class="post">
+
+  <header class="post-header">
+    <h1>第五章：面向对象（上）</h1>
+    <p class="meta">Jun 14, 2015</p>
+  </header>
+
+  <article class="post-content">
+  <ul>
+  <li>static 修饰的成员不能访问没有 static 修饰的成员
+这句话的理解是：static 修饰的成员是属于该类的，可以不用初始化某个实例。而没有 static 修饰的成员是属于实例的，必须先要初始化一个实例之后，才能访问。所以 static 成员（即没有初始化实例的那个）无法访问非 static 成员（需要初始化实例才有效）</li>
+  <li>static 关键字可以用于修饰方法、成员变量。static 修饰的成员表明它属于这个类本身，而不属于这个类的单个实例。这种成员称之为 “静态变量” 或 “静态方法”</li>
+  <li>static 修饰的方法和成员变量，既可通过类来调用，也可以通过实例来调用，但是不建议通过实例来调用</li>
+  <li>如果没有自己实现一个构造器，则编译器会为我们自动实现一个参数为空，内容为空的构造器</li>
+</ul>
+
+<h2 id="section">方法</h2>
+<p>参数个数可变的方法：方法定义中最后一个形参可以定义为一个可变长度的参数
+方法如下：</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">test</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="n">String</span><span class="o">...</span> <span class="n">books</span><span class="o">)</span>
+<span class="o">{</span>
+    <span class="k">for</span><span class="o">(</span><span class="n">String</span> <span class="n">b</span> <span class="o">:</span> <span class="n">books</span><span class="o">)</span>
+    <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">b</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="c1">// 调用</span>
+<span class="n">test</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="s">"book1"</span><span class="o">,</span> <span class="s">"book2"</span><span class="o">)</span>
+<span class="c1">// 或则</span>
+<span class="n">test</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]{</span><span class="s">"book1"</span><span class="o">,</span> <span class="s">"book2"</span><span class="o">})</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>系统会在第一次使用类时加载类，并初始化这个类。在类的准备阶段，系统将会为该类的类变量分配内存空间，并指定默认初始值</li>
+</ul>
+
+<h2 id="section-1">封装</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>private</th>
+      <th>default</th>
+      <th>protected</th>
+      <th>public</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>同一个类中</td>
+      <td>*</td>
+      <td>*</td>
+      <td>*</td>
+      <td>*</td>
+    </tr>
+    <tr>
+      <td>同一个包中</td>
+      <td> </td>
+      <td>*</td>
+      <td>*</td>
+      <td>*</td>
+    </tr>
+    <tr>
+      <td>子类中</td>
+      <td> </td>
+      <td> </td>
+      <td>*</td>
+      <td>*</td>
+    </tr>
+    <tr>
+      <td>全局范围内</td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td>*</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>对于类而言，修饰符只有 public 和默认修饰符（不用任何东西修饰）</li>
+  <li>public 修饰的类所在的文件名必须以该类为名，可以被所有的类访问到</li>
+  <li>默认修饰符的类只能被同一个包中的其他类使用</li>
+  <li>如果某个类主要用作其他类的父类，该类里面包含的大部分方法可能仅希望被其子类重写，而不想被外界直接调用，则应该使用 protected 修饰这些方法</li>
+  <li>protected 主要用于修饰那些希望通过子类来重写的方法</li>
+</ul>
+
+<h2 id="section-2">包</h2>
+<ul>
+  <li>不存在父包和子包的用法，比如说 io.songxincun.github 和 io.songxincun.github.java 从名称上来看有父子模块的关系，但实际使用时没有任何关系，该怎么用怎么用</li>
+  <li>位于同一个包的类可以直接使用，不需要 import 或加全路径</li>
+  <li>Java 原文件应当放置在包路径为名的文件夹下面，目的和包存在的意义一样，为了防止命名冲突啊</li>
+  <li>javac -d 选项编译后的 class 文件也是放置在包路径为名的文件夹下面，目的也是一样，为了防止命名冲突</li>
+</ul>
+
+<h2 id="section-3">多态</h2>
+<p>Java 的变量有两种类型属性：编译时类型和运行时类型
+例如：</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">Animal</span> <span class="n">dog</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Dog</span><span class="o">();</span>
+</code></pre>
+</div>
+<p>上述代码中 dog 变量的编译时类型是 Animal，而运行时的类型则是 Dog</p>
+
+<ul>
+  <li>instanceof 运算符可以判断某个变量的运行时类型是否为某个类：<code class="highlighter-rouge">if (obj instanceof Object)</code></li>
+  <li>其实多态的意思就是可以将子类赋值给父类（子类是一种特殊的父类，例如“狗”是一种特殊的“动物”），但是这时候对象引用只能调用父类的方法，而不再能调用子类的方法。</li>
+  <li>而如果父类的方法被子类重写了的话，那么调用父类的方法其实还是调用的子类的方法，会表现出子类的特性。</li>
+  <li>也就是说同样是 animal，Dog 叫声和 Duck 叫声就不一样了，也就是传说中的多态了。</li>
+  <li>但是！！！与对象的方法不一样的是，对象的实例并不具备这种多态性，也就是在调用对象实例时获取的时父类的实例而非子类。</li>
+</ul>
+
+
+  </article>
+
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); 
+      
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+     
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); 
+
+        s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrap">
+
+    <h2 class="footer-heading">像少年啦飞驰</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>像少年啦飞驰</li>
+        <li><a href="mailto:your-email@domain.com">your-email@domain.com</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col-2 column">
+      <ul>
+        <li>
+          <a href="https://github.com/songxincun">
+            <span class="icon github">
+              <svg version="1.1" class="github-icon-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#C2C2C2" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761
+                c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32
+                c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472
+                c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037
+                C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65
+                c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261
+                c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082
+                c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129
+                c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <span class="username">songxincun</span>
+          </a>
+        </li>
+        
+      </ul>
+    </div>
+
+    <div class="footer-col-3 column">
+      <p class="text">记录思绪的点点滴滴</p>
+    </div>
+
+  </div>
+
+</footer>
+
+
+    </body>
+</html>

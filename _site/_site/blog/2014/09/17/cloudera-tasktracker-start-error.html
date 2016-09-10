@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cloudera TaskTracker 启动失败问题追查记录</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="记录思绪的点点滴滴">
+    <meta name="baidu-site-verification" content="CibWhF6Kxz" />
+    <meta name="google-site-verification" content="pi6a8hODkaYkCKbWh0HqCs2h1OFNs7yklG8wW-VC9Fs" />
+    <link rel="canonical" href="http://yourdomain.com/_site/blog/2014/09/17/cloudera-tasktracker-start-error">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+</head>
+
+
+    <body>
+
+    <header class="site-header">
+
+  <div class="wrap">
+
+    <a class="site-title" href="/">像少年啦飞驰</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+           viewBox="0 0 18 15" enable-background="new 0 0 18 15" xml:space="preserve">
+          <path fill="#505050" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0
+            h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#505050" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484
+            h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#505050" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0
+            c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+      <div class="trigger">
+        
+          <a class="page-link" href="/java/">Java</a>
+        
+          <a class="page-link" href="/hadoop/">Hadoop</a>
+        
+          <a class="page-link" href="/hbase/">HBase</a>
+        
+          <a class="page-link" href="/about/">About</a>
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrap">
+      <div class="post">
+
+  <header class="post-header">
+    <h1>Cloudera TaskTracker 启动失败问题追查记录</h1>
+    <p class="meta">Sep 17, 2014</p>
+  </header>
+
+  <article class="post-content">
+  <h3 id="section">问题描述</h3>
+<p>通过 Cloudera Manager 安装 CDH 时，在启动 MapRed 阶段失败，查看发现 Jobtracker 启动成功，而 TaskTracker 全部失败
+错误信息如下图所示：
+<img src="/images/Cloudera-TaskTracker-Start-ERROR.JPG" alt="ERROR-Message" /></p>
+<blockquote>
+  <p>Error found before invoking supervisord: dictionary update sequence element #78 has length1; 2 is required</p>
+</blockquote>
+
+<p>实际上这个错误是由于环境变量导致的
+执行<code class="highlighter-rouge">env</code>会发现有这么一个环境变量</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>module=() {  eval `/usr/bin/modulecmd bash $*`
+}
+</code></pre>
+</div>
+
+<p>这是一个函数环境变量，由于 env 显示出来的结果不在一行，而本身 cmf 的程序有个 bug，解析这个变量的时候就会有问题</p>
+
+<hr />
+
+<h3 id="section-1">修复方法</h3>
+<p>找到并打开文件 &lt;CM-PATH&gt;/lib64/cmf/agent/src/cmf/util.py 
+找到函数<code class="highlighter-rouge">source</code>，里面有一行代码：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pipe = subprocess.Popen(['/bin/bash', '-c', ". %s; %s; env" % (path, command)],
+                        stdout=subprocess.PIPE, env=caller_env)
+</code></pre>
+</div>
+<p>将这行代码修改成</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pipe = subprocess.Popen(['/bin/bash', '-c', ". %s; %s; env | grep -v { | grep -v }" % (path, command)],
+                        stdout=subprocess.PIPE, env=caller_env)
+</code></pre>
+</div>
+<p>也就是将其中的<code class="highlighter-rouge">env</code>改成<code class="highlighter-rouge">env | grep -v { | grep -v }</code>，这样程序在通过<code class="highlighter-rouge">env</code>获取环境变量的时候就会把那个坑爹的 module 给排除掉了</p>
+
+<p>然后重启 agent，再重试就 OK 了。</p>
+
+<hr />
+
+<h3 id="section-2">排查过程回顾</h3>
+<p>由于之前其他的模块出现错误的时候都是通过查看 &lt;CM-PATH&gt;/run/cloudera-scm-agent/process 下的对应的日志来解决的（这个文件夹下面包含了当前机器的各个角色对应的启动配置及启动日志）
+但是这次的 TaskTracker 对应的目录下面并没有 log，也就是说压根就没来得及执行 MapRed 启动脚本，程序就跪了
+于是查看 agent 的日志 &lt;CM-PATH&gt;/log/cloudera-scm-agent/cloudera-scm-agent.log 
+然后发现里面有跟之前图片吻合的错误日志</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Traceback (most recent call last):
+  File "/home/work/opdir/cm-4.8.1/lib64/cmf/agent/src/cmf/util.py", line 286, in source
+    return dict((line.split("=", 1) for line in data.splitlines()))
+ValueError: dictionary update sequence element #80 has length 1; 2 is required
+</code></pre>
+</div>
+<p>于是就打开 /home/work/opdir/cm-4.8.1/lib64/cmf/agent/src/cmf/util.py 文件，找到那一行，发现代码是这样写的</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>  try:
+    return dict((line.split("=", 1) for line in data.splitlines()))
+  except Exception, e:
+    LOG.exception("Failed to parse environment variables: " + data)
+    raise e
+</code></pre>
+</div>
+<p>然后回到日志文件，找到 Failed to parse environment variables: 这么一行</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[16/Sep/2014 16:03:18 +0000] 2091 MainThread util         ERROR    Failed to parse environment variables: CDH_HCAT_HOME=/opt/cloudera/parcels/CDH-4.7.0-1.cdh4.7.0.p0.40/lib/hcatalog
+HADOOP_LOGFILE=hadoop-cmf-mapreduce1-TASKTRACKER-nj02-rp-2014-q1-01-jh2-213.nj02.baidu.com.log.out
+TOMCAT_HOME=/opt/cloudera/parcels/CDH-4.7.0-1.cdh4.7.0.p0.40/lib/bigtop-tomcat
+HOSTNAME=nj02-rp-2014-q1-01-jh2-213.nj02.baidu.com
+HADOOP_SECURITY_LOGGER=INFO,RFAS
+CDH_SOLR_HOME=/usr/lib/solr
+HADOOP_LOG_DIR=/var/log/hadoop-0.20-mapreduce
+......
+</code></pre>
+</div>
+
+<p>根据前面的代码可以了解到 Failed to parse environment variables: 这句话之后的一系列的 key=value 就是导致程序异常的 “data” 了
+为了找出罪魁祸首的 key=value 组合，创建一个包括所有的 key=vaule 对的文件，然后对其执行 dict((line.split(“=”, 1) for line in data.splitlines())) 操作，最终找到罪魁祸首：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>module=() {  eval `/usr/bin/modulecmd bash $*`
+}
+</code></pre>
+</div>
+<p>找到祸首之后，接下来考虑的就是如何去解决这个问题了
+回溯 data 的来源，可以看到这样的代码</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>pipe = subprocess.Popen(['/bin/bash', '-c', ". %s; %s; env" % (path, command)],
+                        stdout=subprocess.PIPE, env=caller_env)
+data = pipe.communicate()[0]
+</code></pre>
+</div>
+<p>总而言之，data 就是通过执行 <code class="highlighter-rouge">/bin/bash -c ". XXX; CMD; env"</code> 这个命令得到的
+出去单独执行<code class="highlighter-rouge">env</code>命令，就能找到</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>module=() {  eval `/usr/bin/modulecmd bash $*`
+}
+</code></pre>
+</div>
+<p>这样的变量，因此可以通过修改程序，将<code class="highlighter-rouge">env</code>命令修改成<code class="highlighter-rouge">env | grep -v { | grep -v }</code>来修复这一问题</p>
+
+
+  </article>
+
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); 
+      
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+     
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); 
+
+        s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrap">
+
+    <h2 class="footer-heading">像少年啦飞驰</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>像少年啦飞驰</li>
+        <li><a href="mailto:your-email@domain.com">your-email@domain.com</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col-2 column">
+      <ul>
+        <li>
+          <a href="https://github.com/songxincun">
+            <span class="icon github">
+              <svg version="1.1" class="github-icon-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#C2C2C2" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761
+                c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32
+                c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472
+                c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037
+                C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65
+                c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261
+                c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082
+                c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129
+                c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <span class="username">songxincun</span>
+          </a>
+        </li>
+        
+      </ul>
+    </div>
+
+    <div class="footer-col-3 column">
+      <p class="text">记录思绪的点点滴滴</p>
+    </div>
+
+  </div>
+
+</footer>
+
+
+    </body>
+</html>

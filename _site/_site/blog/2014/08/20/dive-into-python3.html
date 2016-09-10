@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Dive into python3 读书小笔记</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="记录思绪的点点滴滴">
+    <meta name="baidu-site-verification" content="CibWhF6Kxz" />
+    <meta name="google-site-verification" content="pi6a8hODkaYkCKbWh0HqCs2h1OFNs7yklG8wW-VC9Fs" />
+    <link rel="canonical" href="http://yourdomain.com/_site/blog/2014/08/20/dive-into-python3">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+</head>
+
+
+    <body>
+
+    <header class="site-header">
+
+  <div class="wrap">
+
+    <a class="site-title" href="/">像少年啦飞驰</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+           viewBox="0 0 18 15" enable-background="new 0 0 18 15" xml:space="preserve">
+          <path fill="#505050" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0
+            h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#505050" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484
+            h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#505050" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0
+            c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+      <div class="trigger">
+        
+          <a class="page-link" href="/java/">Java</a>
+        
+          <a class="page-link" href="/hadoop/">Hadoop</a>
+        
+          <a class="page-link" href="/hbase/">HBase</a>
+        
+          <a class="page-link" href="/about/">About</a>
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrap">
+      <div class="post">
+
+  <header class="post-header">
+    <h1>Dive into python3 读书小笔记</h1>
+    <p class="meta">Aug 20, 2014</p>
+  </header>
+
+  <article class="post-content">
+  <ol>
+  <li>
+    <p>Python3 里的字符串 (str 类) 不再是 ASCII 码, 而是 Unicode. 而无意义的二进制序列为 bytes 和 bytearray.</p>
+  </li>
+  <li>
+    <p>list, tuple 都是有序的. set, dict 是无序的.</p>
+  </li>
+  <li>
+    <p>Python 中的函数调用, 第一个 <code class="highlighter-rouge">key=value</code> 之后的参数必须全是 <code class="highlighter-rouge">key=value</code> 形式.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">type(x)</code> 返回 x 的类型.
+<code class="highlighter-rouge">type(x) == int</code> 等价于 <code class="highlighter-rouge">type(x) is int</code> 等价于 <code class="highlighter-rouge">isinstance(x, int)</code>.
+int 是内置类型, 已预先定义.</p>
+
+    <p>对于自定义类: 
+<code class="highlighter-rouge">a = myClass()</code> 和 <code class="highlighter-rouge">type(a) == myClass</code> 等价于 <code class="highlighter-rouge">type(a) is myClass</code> 等价于 <code class="highlighter-rouge">isinstance(a, myClass)</code>.</p>
+  </li>
+  <li>
+    <p>Python3 普通除法 “/” 为保留精度除, 而 “//” 才为C语言里的整数除</p>
+  </li>
+  <li>
+    <p>Python 中的 None 有自己的类型 (NoneType) 而这个类型只能创建着一个实例, 就是 None, 所以所有的 None 都是一样的.</p>
+  </li>
+  <li>
+    <p>bytes 是字节串, 而 str 是 Unicode 字符串. 两者<strong>不能</strong>互操作! bytes 可以通过 decode 方法来转化成 str, str 可以通过 encode 来转换成 bytes 两者的参数都是编码方式.</p>
+  </li>
+  <li>
+    <p>bytes 和 bytearray 的区别就是 bytes 是不可变的, 只能读. 
+而 bytearray 是可变的, 可以 <code class="highlighter-rouge">bytearray[1] = value</code>, 其中 value 的值只能介于 0 ~ 255, 这个很好理解吗, 应为一个字节的值就是介于 0 ~ 255. 其他的都一样.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">len(bytes)</code> 求 bytes 所占的字节数, 所以 <code class="highlighter-rouge">len("string".encode('utf-8'))</code> 即可求出 utf-8 编码的 string 的字节数.</p>
+  </li>
+  <li>松散正则表达式:
+    <ul>
+      <li>空白符被忽略.</li>
+      <li>空格, 制表符和回车在正则表达式中并不会匹配空格, 制表符, 回车. 
+如果你想在正则表达式中匹配他们, 可以在前面加一个”"来转义.</li>
+      <li>注释信息被忽略. 松散正字表达式中的注释和 Python 代码中的一样,
+都是以”#”开头直到行尾. 它可以在多行正则表达式中增加注释信息,
+这就避免了在 Python 代码中的多行注释. 他们的工作方式是一样的.</li>
+    </ul>
+  </li>
+  <li>
+    <p>生成器 yield 的原理.
+比如说:</p>
+
+    <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">a_yield</span><span class="p">():</span>                  
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>  
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">i</span>   
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>   
+</code></pre>
+    </div>
+
+    <p>调用该函数的时候 <code class="highlighter-rouge">a_yield()</code> 返回的将是一个生成器, 可用在 for 循环中.</p>
+
+    <p>原理是对其调用 <code class="highlighter-rouge">iter()</code> 返回其自身, 对其调用 <code class="highlighter-rouge">next()</code> 则开始执行函数.
+函数在遇到 yield 时相当于 return 会返回 yield 之后的值.
+这个值就是 <code class="highlighter-rouge">next()</code> 返回的值, 并且函数会暂停. 
+下次调用 <code class="highlighter-rouge">next()</code> 的时候, 函数会从上次暂停的地方继续执行. 
+当函数执行完毕或者 return 时 (注意, return 不能有返回值), <code class="highlighter-rouge">next()</code> 会抛出 StopIteration.</p>
+  </li>
+  <li>
+    <p>迭代器的原理.
+<code class="highlighter-rouge">__iter__(self)</code> 用于循环初始化, 注意的是, 它返回一个初始化之后的有 <code class="highlighter-rouge">__next__()</code> 方法的对象, 一般也就是自身 (self) 吗.
+<code class="highlighter-rouge">__next__(self)</code> 用于 next 调用. 其返回值相当于 <code class="highlighter-rouge">next()</code> 的返回值.</p>
+  </li>
+  <li>
+    <p>for 循环的原理.
+比如说:</p>
+
+    <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">a_list</span><span class="p">:</span> 
+    <span class="n">loop</span><span class="o">-</span><span class="n">statement</span>
+</code></pre>
+    </div>
+
+    <p>首先调用 <code class="highlighter-rouge">iter(a_list)</code> 然后对返回的对象 iter_return (而不是 a_list) 不断的调用 <code class="highlighter-rouge">next(iter_return)</code> 并将值付给 i 直至 StopIteration!</p>
+
+    <p><code class="highlighter-rouge">iter()</code> 相当于循环初始化.</p>
+  </li>
+  <li>
+    <p>assert 表达式[, “提示字符串”]
+判断表达式不成立时抛出 AssertionError 并打印”提示字符串”.
+等价于:</p>
+
+    <div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="ow">not</span> <span class="err">表达式</span><span class="p">:</span> 
+    <span class="k">raise</span> <span class="nb">AssertionError</span><span class="p">(</span><span class="s">"提示字符串"</span><span class="p">)</span>
+</code></pre>
+    </div>
+  </li>
+  <li>
+    <p>有列表解析, 字典解析, 集合解析. 但是没有元组解析. 因为元组相应的操作会生成一个”生成器 (就是用 yield 创建的那个东西)”.
+这个东西可以做为一些以可迭代数据为参数的函数的参数. 比如说: <code class="highlighter-rouge">list()</code>, <code class="highlighter-rouge">set()</code>. 在在这种情况下就不需要两边的括号了, 同时比列表解析更有效率.
+也即用: <code class="highlighter-rouge">list(i for i in a_list)</code> 代替 <code class="highlighter-rouge">list([i for i in a_list])</code>.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">io.StringIO()</code> 可以将一个字符串转换成流, 类似于文件, 可以用文件的接口来操作字符串 (seek, read, tell 等).
+<code class="highlighter-rouge">io.BytesIO()</code> 同样可以将一个 byte array 转换成字节文件.</p>
+  </li>
+  <li>with 可以创建一个上下文环境, 当进入该环境时, 会默认执行 __enter__ 方法, 离开时会执行 __exit__ 方法.</li>
+</ol>
+
+
+  </article>
+
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); 
+      
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+     
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); 
+
+        s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrap">
+
+    <h2 class="footer-heading">像少年啦飞驰</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>像少年啦飞驰</li>
+        <li><a href="mailto:your-email@domain.com">your-email@domain.com</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col-2 column">
+      <ul>
+        <li>
+          <a href="https://github.com/songxincun">
+            <span class="icon github">
+              <svg version="1.1" class="github-icon-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#C2C2C2" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761
+                c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32
+                c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472
+                c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037
+                C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65
+                c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261
+                c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082
+                c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129
+                c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <span class="username">songxincun</span>
+          </a>
+        </li>
+        
+      </ul>
+    </div>
+
+    <div class="footer-col-3 column">
+      <p class="text">记录思绪的点点滴滴</p>
+    </div>
+
+  </div>
+
+</footer>
+
+
+    </body>
+</html>

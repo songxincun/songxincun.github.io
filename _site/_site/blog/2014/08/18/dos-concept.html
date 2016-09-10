@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>DOS 一些概念</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="记录思绪的点点滴滴">
+    <meta name="baidu-site-verification" content="CibWhF6Kxz" />
+    <meta name="google-site-verification" content="pi6a8hODkaYkCKbWh0HqCs2h1OFNs7yklG8wW-VC9Fs" />
+    <link rel="canonical" href="http://yourdomain.com/_site/blog/2014/08/18/dos-concept">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+</head>
+
+
+    <body>
+
+    <header class="site-header">
+
+  <div class="wrap">
+
+    <a class="site-title" href="/">像少年啦飞驰</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+           viewBox="0 0 18 15" enable-background="new 0 0 18 15" xml:space="preserve">
+          <path fill="#505050" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0
+            h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#505050" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484
+            h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#505050" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0
+            c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+      <div class="trigger">
+        
+          <a class="page-link" href="/java/">Java</a>
+        
+          <a class="page-link" href="/hadoop/">Hadoop</a>
+        
+          <a class="page-link" href="/hbase/">HBase</a>
+        
+          <a class="page-link" href="/about/">About</a>
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrap">
+      <div class="post">
+
+  <header class="post-header">
+    <h1>DOS 一些概念</h1>
+    <p class="meta">Aug 18, 2014</p>
+  </header>
+
+  <article class="post-content">
+  <ol>
+  <li>
+    <p>Dos 变量和命令及命令的选项不区分大小写</p>
+  </li>
+  <li>
+    <p><strong>注意：Dos 中的路径名是用 ‘' 而非 ‘/’ 来分隔的</strong>
+其中 . 和 .. 跟 Shell 下一样分别表示 “当前目录” 和 “父目录”</p>
+  </li>
+  <li>
+    <p>Shell 下用 ‘-‘ 来表示选项，如：”-l”，”-R”
+Dos 用 ‘/’ 来表示，比如说：”/L”，”/R”，”/?”</p>
+  </li>
+  <li>
+    <p>‘*’ 和 ‘?’ 通配符跟 Shell 的意思一样</p>
+  </li>
+  <li>
+    <p>HELP 命令可以列出常用的命令。或查询给出的命令的帮助信息
+command /? 也是一样的效果</p>
+  </li>
+  <li>
+    <p>SET 命令列出所有的变量
+SET var 列出变量 var 的值</p>
+  </li>
+  <li>
+    <p>变量 %PATH% 中保存的值是 Dos 查找命令的路径。相当于 Shell 下的 PATH 环境变量
+区别在于 Shell 用 ‘:’ 来分割路径，而 Dos 用 ‘;’ 分割</p>
+  </li>
+  <li>
+    <p>Dos 下文件的执行：
+Dos 下文件的执行跟 UNIX 不一样，Dos 没有 UNIX 可执行权限的概念。所有的文件由扩展名来分类。
+不同的分类关联到不同的开放式命令，举例来说：</p>
+
+    <pre><code class="language-bat">C:\Users\Administrator&gt; ASSOC .html
+.html=WebFile
+C:\Users\Administrator&gt; ASSOC .mht
+.mht=WebFile
+C:\Users\Administrator&gt; ASSOC .txt
+.txt=txtfile
+</code></pre>
+
+    <p>ASSOC 命令查询给出的扩展名的分类。不同的扩展名可以分在同一类。比如上面的 .html 文件和 .mht 文件都属于 WebFile 类</p>
+
+    <pre><code class="language-bat">C:\Users\Administrator&gt; FTYPE txtfile
+txtfile=C:\windows\notepad.exe %1
+</code></pre>
+
+    <p>FTYPE 命令查询给出的分类所对应的开放式命令。也就是说执行这类文件时，相当于执行对应的命令。
+Dos 下没有可执行权限的概念，任何文件列出来就会执行对应的开放式命令。比如说：</p>
+
+    <pre><code class="language-bat">C:\Users\Administrator&gt; test.txt
+</code></pre>
+
+    <p>按照上面 FTYPE 给出的结果就相当于执行：</p>
+
+    <pre><code class="language-bat">C:\Users\Administrator&gt; C:\windows\notepad.exe test.txt
+</code></pre>
+
+    <p>Dos 下有个变量 “%PATHEXT%” 里面保存了可以直接执行的文件的扩展名。
+这些文件列出名字而无需写全扩展名即可执行，感觉好无聊啊</p>
+  </li>
+  <li>
+    <p>重定向和管道貌似基本跟 Shell 一样</p>
+  </li>
+  <li>
+    <p>&amp;&amp; 和 || 的短路作用跟 Shell 的一样。
+Shell 采用 ‘;’ 来分隔同一行的命令。而 Dos 采用 ‘&amp;’ 来分隔。用 () 可以将多个命令组合起来</p>
+  </li>
+</ol>
+
+
+  </article>
+
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); 
+      
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+     
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); 
+
+        s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrap">
+
+    <h2 class="footer-heading">像少年啦飞驰</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>像少年啦飞驰</li>
+        <li><a href="mailto:your-email@domain.com">your-email@domain.com</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col-2 column">
+      <ul>
+        <li>
+          <a href="https://github.com/songxincun">
+            <span class="icon github">
+              <svg version="1.1" class="github-icon-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#C2C2C2" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761
+                c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32
+                c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472
+                c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037
+                C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65
+                c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261
+                c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082
+                c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129
+                c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <span class="username">songxincun</span>
+          </a>
+        </li>
+        
+      </ul>
+    </div>
+
+    <div class="footer-col-3 column">
+      <p class="text">记录思绪的点点滴滴</p>
+    </div>
+
+  </div>
+
+</footer>
+
+
+    </body>
+</html>

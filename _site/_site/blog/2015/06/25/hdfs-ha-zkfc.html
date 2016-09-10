@@ -4,12 +4,12 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>HBase</title>
+    <title>HDFS HA 控制 zkfc 判断 NameNode 响应超时的两个重要的参数</title>
     <meta name="viewport" content="width=device-width">
     <meta name="description" content="记录思绪的点点滴滴">
     <meta name="baidu-site-verification" content="CibWhF6Kxz" />
     <meta name="google-site-verification" content="pi6a8hODkaYkCKbWh0HqCs2h1OFNs7yklG8wW-VC9Fs" />
-    <link rel="canonical" href="http://yourdomain.com/hbase/">
+    <link rel="canonical" href="http://yourdomain.com/_site/blog/2015/06/25/hdfs-ha-zkfc">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/main.css">
@@ -64,50 +64,61 @@
       <div class="post">
 
   <header class="post-header">
-    <h1>HBase</h1>
+    <h1>HDFS HA 控制 zkfc 判断 NameNode 响应超时的两个重要的参数</h1>
+    <p class="meta">Jun 25, 2015</p>
   </header>
 
   <article class="post-content">
-  <div class="home">
+  <h3 id="zkfc-zookeeper-failover-controller">ZKFC: Zookeeper failover controller</h3>
+<p>HDFS HA 切换有点频繁及莫名其妙，实际上去看，NameNode 并没有异常</p>
 
-  <h1>Posts</h1>
+<p>ha.failover-controller.graceful-fence.rpc-timeout.ms
+ha.zookeeper.session-timeout.ms</p>
 
-  <ul class="posts">
-    
-      <li>
-      <span class="post-date">Nov 9, 2014</span>
-        <a class="post-link" href="/_site/blog/2014/11/09/hbase-shell">HBase Shell 命令</a>
-      </li>
-    
-      <li>
-      <span class="post-date">Oct 22, 2014</span>
-        <a class="post-link" href="/_site/blog/2014/10/22/hbase-operation">HBase 操作记录</a>
-      </li>
-    
-      <li>
-      <span class="post-date">Oct 10, 2014</span>
-        <a class="post-link" href="/_site/blog/2014/10/10/happybase">happybase</a>
-      </li>
-    
-      <li>
-      <span class="post-date">Sep 24, 2014</span>
-        <a class="post-link" href="/_site/blog/2014/09/24/hbase-install-how-to">HBase 安装记录</a>
-      </li>
-    
-      <li>
-      <span class="post-date">Sep 11, 2014</span>
-        <a class="post-link" href="/_site/blog/2014/09/11/hbase-install-remind">HBase 安装注意事项</a>
-      </li>
-    
-  </ul>
+<p>这两个参数用于控制 ZKFC 的超时判断，默认好像是 5s，调大以避免 HA 过于敏感</p>
 
-  <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p>
-
-</div>
 
   </article>
 
 </div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); 
+      
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+     
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); 
+
+        s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+
+
       </div>
     </div>
 
