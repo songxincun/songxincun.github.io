@@ -27,3 +27,6 @@ redcarpet:
     - footnotes
 
 permalink: /blog/:year/:month/:day/:title
+
+atom:
+    baseurl: "/_site"
