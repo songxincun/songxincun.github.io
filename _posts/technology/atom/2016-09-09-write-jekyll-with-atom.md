@@ -52,19 +52,19 @@ categories:
           [@command]
       ```
 改成
-``` coffee
-  getArgs: ->
-  #if @_needsWorkaround()
-  #  [
-  #    "-c",
-  #    [@command].concat(@args.map((i) ->
-  #      "\"" + i.replace(/\"/g, "\\\"") + "\""
-  #    )).join(" ")
-  #  ]
-  #else
-  #  [@command]
-   @args
-```
+      ``` coffee
+        getArgs: ->
+        #if @_needsWorkaround()
+        #  [
+        #    "-c",
+        #    [@command].concat(@args.map((i) ->
+        #      "\"" + i.replace(/\"/g, "\\\"") + "\""
+        #    )).join(" ")
+        #  ]
+        #else
+        #  [@command]
+         @args
+      ```
 就可以了
 
 - 内外 ssh 到外网是有防火墙的，需要配置代理，具体参看内外文章
