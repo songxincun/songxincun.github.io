@@ -52,7 +52,6 @@ categories:
     [@command]
 ```
 改成
-
 ``` coffee
   getArgs: ->
   #if @_needsWorkaround()
