@@ -37,18 +37,19 @@ categories:
 - Github windows 的客户端默认是通过 https 来拉取仓库的，而 git-plus 和 sync-on-save 在通过 https push 的时候会有问题（主要是在输入用户名密码的时候不兼容 windows），所以要通过 ssh 免密码来同步
     - 自己用 Git-bash 通过 ssh 的方式来将仓库拉下来，这样后续 push 的时候也是通过 ssh 了
     - ssh 免密码：通过 Git-bash 查看 ~/.ssh 下面有没有生成好的私钥，如果有就算了，没有就自己生成，同步到 Github 网站。用 ssh -T git@github.com 来测试连接
-        - sync-on-save 插件有一个 bug，push 的时候会提示 git: not a command for git, 解决方法：通过 Ctrl+Alt+I 调出来调试窗口，然后将文件：command-runner.coffee 里面的``` coffee
-        getArgs: ->
-  if @_n   eedsWorkaround()
-    [
-      "-c",
-      [@command].concat(@args.map((i) ->
-        "\"" + i.replace(/\"/g, "\\\"") + "\""
-      )).join(" ")
-    ]
-  else
-    [@command]
-```
+        - sync-on-save 插件有一个 bug，push 的时候会提示 git: not a command for git, 解决方法：通过 Ctrl+Alt+I 调出来调试窗口，然后将文件：command-runner.coffee 里面的
+        ``` coffee
+            getArgs: ->
+            if @_needsWorkaround()
+                [
+                    "-c",
+                    [@command].concat(@args.map((i) ->
+                        "\"" + i.replace(/\"/g, "\\\"") + "\""
+                    )).join(" ")
+                ]
+            else
+                [@command]
+        ```
 改成
 ``` coffee
   getArgs: ->
