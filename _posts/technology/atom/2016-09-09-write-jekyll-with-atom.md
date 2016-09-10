@@ -10,7 +10,7 @@ categories:
 
 - 要云和本地，多机备份方便：Github
 - 要格式简单不过度依赖某个固定的格式：Markdown
-- 
+-
 
 前面两点确定了 Github + Jekyll 的解决方案。然后接下来是用哪个编辑器呢：
 
@@ -39,7 +39,6 @@ categories:
     - 自己用 Git-bash 通过 ssh 的方式来将仓库拉下来，这样后续 push 的时候也是通过 ssh 了
     - ssh 免密码：通过 Git-bash 查看 ~/.ssh 下面有没有生成好的私钥，如果有就算了，没有就自己生成，同步到 Github 网站。用 ssh -T git@github.com 来测试连接
     - sync-on-save 插件有一个 bug，push 的时候会提示 git: not a command for git, 解决方法：通过 Ctrl+Alt+I 调出来调试窗口，然后将文件：command-runner.coffee 里面的
-
 ``` coffee
   getArgs: ->
   if @_needsWorkaround()
