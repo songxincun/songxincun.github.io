@@ -40,17 +40,17 @@ categories:
     - sync-on-save 插件有一个 bug，push 的时候会提示 git: not a command for git, 解决方法：通过 Ctrl+Alt+I 调出来调试窗口，然后将文件：command-runner.coffee 里面的
 
       ``` coffee
-       getArgs: ->
-         if @_needsWorkaround()
-           [
-             "-c",
-             [@command].concat(@args.map((i) ->
-               "\"" + i.replace(/\"/g, "\\\"") + "\""
-             )).join(" ")
-           ]
-         else
-           [@command]
-       ```
+      getArgs: ->
+        if @_needsWorkaround()
+          [
+            "-c",
+            [@command].concat(@args.map((i) ->
+              "\"" + i.replace(/\"/g, "\\\"") + "\""
+            )).join(" ")
+          ]
+        else
+          [@command]
+      ```
 改成
 ``` coffee
   getArgs: ->
