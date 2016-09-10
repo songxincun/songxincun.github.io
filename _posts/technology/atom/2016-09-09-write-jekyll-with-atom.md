@@ -51,7 +51,7 @@ categories:
         else
           [@command]
       ```
-改成
+    改成
       ``` coffee
         getArgs: ->
         #if @_needsWorkaround()
@@ -65,7 +65,7 @@ categories:
         #  [@command]
          @args
       ```
-就可以了
+    就可以了
 
 - 内外 ssh 到外网是有防火墙的，需要配置代理，具体参看内外文章
 - Jekyll 插件有一个 nodejs 的问题，就是 build.coffee 文件里面是用 childProcess.spawn 来执行 jekyll build 命令的，而这个方法在 windows 下面按它的方法有一些问题（可以 google 一下 childProcess.spawn 和 childProcess.exec 的区别），所以在配置 Build Command 的时候要配置成：
