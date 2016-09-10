@@ -10,7 +10,6 @@ categories:
 
 - 要云和本地，多机备份方便：Github
 - 要格式简单不过度依赖某个固定的格式：Markdown
--
 
 前面两点确定了 Github + Jekyll 的解决方案。然后接下来是用哪个编辑器呢：
 
