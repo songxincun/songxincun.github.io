@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Cloudera Manager 安装详解</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="记录思绪的点点滴滴">
+    <meta name="baidu-site-verification" content="CibWhF6Kxz" />
+    <meta name="google-site-verification" content="pi6a8hODkaYkCKbWh0HqCs2h1OFNs7yklG8wW-VC9Fs" />
+    <link rel="canonical" href="http://yourdomain.com/blog/2014/09/18/CM-install">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+</head>
+
+
+    <body>
+
+    <header class="site-header">
+
+  <div class="wrap">
+
+    <a class="site-title" href="/">像少年啦飞驰</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+           viewBox="0 0 18 15" enable-background="new 0 0 18 15" xml:space="preserve">
+          <path fill="#505050" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0
+            h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#505050" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484
+            h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#505050" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0
+            c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+      <div class="trigger">
+        
+          <a class="page-link" href="/java/">Java</a>
+        
+          <a class="page-link" href="/hadoop/">Hadoop</a>
+        
+          <a class="page-link" href="/hbase/">HBase</a>
+        
+          <a class="page-link" href="/about/">About</a>
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrap">
+      <div class="post">
+
+  <header class="post-header">
+    <h1>Cloudera Manager 安装详解</h1>
+    <p class="meta">Sep 18, 2014</p>
+  </header>
+
+  <article class="post-content">
+  <p>Cloudera Manager（以下简称 CM）安装主要是针对 CM Server 及 CM Agent。其他诸如 Service Monitor、Host Monitor 等这些服务是在安装 CDH 的时候一并安装的</p>
+
+<p>安装的方式主要有三种：</p>
+
+<ol>
+  <li>
+    <p>通过 Cloudera 公司提供的 bin 文件来安装
+这种方式只能用来安装 CM Server，节点机器上的 Agent 只能再另外通过 Web 页面等其他方式来安装
+采用 bin 文件的安装方式本质上也是用 yum 来安装的，主要是会安装 CM Server、JDK、Deamons Tools、PostgreSQL，并且会自动帮忙配置好，这一点从 CM 的 yum 源就能看出来</p>
+  </li>
+  <li>
+    <p>通过 yum 来安装
+这种方式对比第一种来说其实就是将其中的安装步骤拆分下来，并且可以弃用默认提供的 PostgreSQL 自己选择一个数据库，如果选择的是 MySQL，还需要再提供额外的 JDBC 库。JDK 也需要自己提供</p>
+  </li>
+  <li>
+    <p>通过 tar 文件来离线安装
+其实就是将一个已有的 tar 包解压缩，修改下配置，然后起服务。对比上面两种方式的优点是：</p>
+    <ul>
+      <li>完全离线</li>
+      <li>一切自己定制，包括 JDK、数据库、文件路径，由于 yum 方式安装最终的程序是放在 ROOT 分区下的，日志也是打在 ROOT 分区下，所以有将 ROOT 分区打满的危险</li>
+    </ul>
+  </li>
+</ol>
+
+<p>下面分别介绍 CM Server 及 CM Agent 安装的具体方法：</p>
+
+<h3 id="cm-server">CM Server</h3>
+<h4 id="bin-">一、bin 文件方式安装</h4>
+<p>通过 bin 文件方式安装，你可能需要通过配置一个本地 yum 源来提高安装的速度及可靠性，具体的方法可以参见：<a href="/blog/2014/09/18/how-to-create-yum-source-for-cloudera/">如何为 Cloudera 建立本地 yum 源</a></p>
+
+<p>然后就是运行 bin 文件安装就行了，安装完成之后可以通过 7180 端口来访问服务，安装过程中出现的错误，可以通过查看弹窗上面给出的日志来进行排查</p>
+
+<h4 id="yum-">二、yum 方式安装</h4>
+<p>通过 yum 方式安装，你可能需要通过配置一个本地 yum 源来提高安装的速度及可靠性，具体的方法可以参见：<a href="/blog/2014/09/18/how-to-create-yum-source-for-cloudera/">如何为 Cloudera 建立本地 yum 源</a></p>
+
+<p>之后就可以通过 yum 命令来安装了，可以通过 yum search cloudera-manager 命令来列出所有提供的包</p>
+
+<p>其中 Server 端需要安装包为：</p>
+
+<ul>
+  <li>cloudera-manager-server.x86_64</li>
+  <li>cloudera-manager-daemons.x86_64</li>
+</ul>
+
+<p>如果采用 Cloudera Manager 提供的 PostgreSQL 来作为数据库，也可以安装</p>
+
+<ul>
+  <li>cloudera-manager-server-db.x86_64</li>
+</ul>
+
+<p>这个包，当然你也可以自己弄一个 MySQL 来代替 PostgreSQL</p>
+
+<p>安装之后可以用命令 service cloudera-scm-server start 来启动服务
+可以通过查看 /var/log/cloudera-scm-server/cloudera-scm-server.log 日志来排查可能出现的问题
+/var/run/cloudera-scm-server.pid 里面放的是 Server 进程的 pid
+/etc/cloudera-scm-server/db.properties 里面是同数据库的连接配置，注意，如果数据库采用的是非默认端口，应该在 com.cloudera.cmf.db.host 配置项里面采用 hostname:port 的方式来配置数据库端口</p>
+
+<p>如果是采用 MySQL 数据库，则还需要自己弄一个 JDBC 库，方法很简单，copy 一个 mysql-connector-java-X.X.XX.jar 包到 /usr/share/cmf/lib/ 路径下即可</p>
+
+<h4 id="tar-">三、tar 方式安装</h4>
+<p>4.8 版本 Cloudera Manager 压缩包地址：
+<a href="http://archive.cloudera.com/cm4/cm/4/cloudera-manager-el6-cm4.8.1_x86_64.tar.gz">http://archive.cloudera.com/cm4/cm/4/cloudera-manager-el6-cm4.8.1_x86_64.tar.gz</a></p>
+
+<p>Down 下来之后解压到自己想要的目录，解压后得到的文件夹的目录结构如下：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>cm-4.8.1-+-etc-+-cloudera-scm-agent
+         |     |-cloudera-scm-server
+         |     |-default
+         |     |-init.d
+         |     `security
+         |-lib
+         |-lib64
+         |-log
+         |-run
+         |-sbin
+         `-share
+</code></pre>
+</div>
+
+<p>解压后的目录同系统的目录一一对应关系是：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>etc     /etc
+lib     /usr/lib
+lib64   /usr/lib64
+log     /var/log
+run     /var/run
+sbin    /usr/sbin
+share   /usr/share
+</code></pre>
+</div>
+
+<p>启动脚本就放在 etc/init.d 咯，如果将脚本考本到 /etc/init.d 就可以通过 service XXX start 的方式来启动</p>
+
+<h3 id="cm-agent">CM Agent</h3>
+<h4 id="cm-server--web-">一、通过 CM Server 的 Web 界面安装</h4>
+<p>通过 Web 界面方式安装，你可能需要通过配置一个本地 yum 源来提高安装的速度及可靠性，具体的方法可以参见：<a href="/blog/2014/09/18/how-to-create-yum-source-for-cloudera/">如何为 Cloudera 建立本地 yum 源</a></p>
+
+<p>如果是一个全新的系统，没有添加任何集群，则 “服务” –&gt; “所有服务” –&gt; “添加集群”
+如果已有集群，则点击 “主机” 然后 “向群集添加新机器”</p>
+
+<p>记得在 “选择存储库” 的时候选择 “自定义存储库” 然后添加本地 yum 库地址</p>
+
+<p>需要注意的是，这种 Web 方式的安装也会同时将 CDH 给装上
+安装 CDH 的步骤及注意事项参考：<a href="/blog/2014/09/18/CDH-install/">CDH 安装手册</a></p>
+
+<h4 id="yum--1">二、yum 方式安装</h4>
+<p>通过 yum 方式安装，你可能需要通过配置一个本地 yum 源来提高安装的速度及可靠性，具体的方法可以参见：<a href="/blog/2014/09/18/how-to-create-yum-source-for-cloudera/">如何为 Cloudera 建立本地 yum 源</a></p>
+
+<p>之后就可以通过 yum 命令来安装了，可以通过 yum search cloudera-manager 命令来列出所有提供的包</p>
+
+<p>其中 Agent 端需要安装的包为：</p>
+
+<ul>
+  <li>cloudera-manager-server.x86_64</li>
+  <li>cloudera-manager-daemons.x86_64</li>
+</ul>
+
+<p>安装好了之后，需要修改 /etc/cloudera-scm-agent/config.ini 配置文件来配置 Server 的地址
+然后可以用命令 service cloudera-scm-agent start 来启动服务
+/var/log/cloudera-scm-agent/cloudera-scm-agent.log 里面是日志
+/var/run/cloudera-scm-agent.pid 里面放的是 agent 的 pid
+/var/run/cloudera-scm-agent/process/ 里面是 Hadoop 的各个 component 的配置及启动日志</p>
+
+<h4 id="tar--1">三、tar 方式安装</h4>
+<p>Agent 的 tar 包同 Server 的是一样的</p>
+
+<p>同样，也需要修改 ./etc/cloudera-scm-agent/config.ini 文件来设置 Server 服务器</p>
+
+<p>./etc/init.d/cloudera-scm-agent start 启动服务</p>
+
+
+  </article>
+
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); 
+      
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+     
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); 
+
+        s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrap">
+
+    <h2 class="footer-heading">像少年啦飞驰</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>像少年啦飞驰</li>
+        <li><a href="mailto:your-email@domain.com">your-email@domain.com</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col-2 column">
+      <ul>
+        <li>
+          <a href="https://github.com/songxincun">
+            <span class="icon github">
+              <svg version="1.1" class="github-icon-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#C2C2C2" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761
+                c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32
+                c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472
+                c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037
+                C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65
+                c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261
+                c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082
+                c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129
+                c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <span class="username">songxincun</span>
+          </a>
+        </li>
+        
+      </ul>
+    </div>
+
+    <div class="footer-col-3 column">
+      <p class="text">记录思绪的点点滴滴</p>
+    </div>
+
+  </div>
+
+</footer>
+
+
+    </body>
+</html>

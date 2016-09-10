@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>HBase 安装注意事项</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="记录思绪的点点滴滴">
+    <meta name="baidu-site-verification" content="CibWhF6Kxz" />
+    <meta name="google-site-verification" content="pi6a8hODkaYkCKbWh0HqCs2h1OFNs7yklG8wW-VC9Fs" />
+    <link rel="canonical" href="http://yourdomain.com/blog/2014/09/11/hbase-install-remind">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+</head>
+
+
+    <body>
+
+    <header class="site-header">
+
+  <div class="wrap">
+
+    <a class="site-title" href="/">像少年啦飞驰</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+           viewBox="0 0 18 15" enable-background="new 0 0 18 15" xml:space="preserve">
+          <path fill="#505050" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0
+            h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#505050" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484
+            h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#505050" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0
+            c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+      <div class="trigger">
+        
+          <a class="page-link" href="/java/">Java</a>
+        
+          <a class="page-link" href="/hadoop/">Hadoop</a>
+        
+          <a class="page-link" href="/hbase/">HBase</a>
+        
+          <a class="page-link" href="/about/">About</a>
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrap">
+      <div class="post">
+
+  <header class="post-header">
+    <h1>HBase 安装注意事项</h1>
+    <p class="meta">Sep 11, 2014</p>
+  </header>
+
+  <article class="post-content">
+  <h3 id="section">硬件</h3>
+
+<h4 id="cpu">一、CPU</h4>
+<p>无</p>
+
+<h4 id="section-1">二、内存</h4>
+<p>据说一个 Java 的进程不应该分配过多的内存（堆），否则内存碎片过多引发堆重写的时候，会引发灾难</p>
+
+<h4 id="section-2">三、磁盘</h4>
+<p>应该保证一个磁盘上面至少一个 CPU 核</p>
+
+<h3 id="section-3">软件</h3>
+
+<h4 id="section-4">一、文件系统</h4>
+<p>在挂载文件系统时应该设置 noatime 属性来禁止记录文件访问时间戳以减少内核的管理开销。HBase 不需要这个功能，禁用这个据说可以大幅提高磁盘的读取性能</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>设置 noatime 选项：编辑 /etc/fstab 文件
+/dev/sdd1    /data    ext3    defaults,noatime  0  0
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">tune2fs -m 1 &lt;device-name&gt;</code>可以减少磁盘的保留块的数目，从而提高磁盘利用率</p>
+
+<h4 id="hadoop">二、Hadoop</h4>
+<p>HDFS 需要支持 sync 功能，否则 HBase 可能在灾难性场景中丢失数据。sync 特性是干什么用的？支持 append 么？</p>
+
+<h4 id="section-5">三、域名服务</h4>
+<p>检查 /etc/hosts 文件，看环回 localhost 配置是否正确</p>
+
+<p>hbase.regionserver.dns.interface 配置项可以配置？</p>
+
+<p>hbase.regionserver.dns.nameserver 配置项可以配置与系统默认配置不同的域名服务器地址</p>
+
+<h4 id="section-6">四、同步时间</h4>
+<p>集群节点的时间不同步可能会产生一些奇怪的结果</p>
+
+<h4 id="section-7">五、文件句柄和进程限制</h4>
+<p>Too many open files</p>
+
+<p><code class="highlighter-rouge">lsof -p &lt;pid-of-regionserver&gt;</code>可以看到当前的 regionserver 所占用的文件描述符数</p>
+
+<p>HBase 会在第一行日志打印 ulimit 信息</p>
+
+<p>修改文件最大描述符上限方法：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>修改文件：/etc/security/limits.conf
+添加下面一行
+hadoop  -    nofile  655360
+
+然后就是 nproc 的值，how？
+
+修改文件：/etc/pam.d/common-session
+添加下面一行
+session required pam_limits.so
+
+重新登录，配置生效
+</code></pre>
+</div>
+
+<h4 id="datanode-">六、DataNode 处理线程数</h4>
+<p>HDFS 的 DataNode 会设置服务时可处理的文件数上限，这个参数叫做 xcievers</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;property&gt;</span>
+  <span class="nt">&lt;name&gt;</span>dfs.datanode.max.xcievers<span class="nt">&lt;/name&gt;</span>
+  <span class="nt">&lt;value&gt;</span>4096<span class="nt">&lt;/value&gt;</span>
+<span class="nt">&lt;/property&gt;</span>
+</code></pre>
+</div>
+
+<p>不配置这个选项可能会导致一些奇怪的问题。用户最终会在数据节点的日志中发现 xcievers 使用超限的异常，这个异常是以块丢失的异常抛出来的</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>10/12/08 20:10:31 INFO hdfs.DFSClient: Cloud not obtain block
+    blk_XXXXXXXXXXXXXX_YYYYYYY from any node: java.io.IOException:
+    No live nodes contain current block. Will get new block locations from
+    namenode and retry...
+</code></pre>
+</div>
+
+<h4 id="section-8">七、交换区</h4>
+<p>关掉 swap 分区</p>
+
+
+  </article>
+
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); 
+      
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+     
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); 
+
+        s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrap">
+
+    <h2 class="footer-heading">像少年啦飞驰</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>像少年啦飞驰</li>
+        <li><a href="mailto:your-email@domain.com">your-email@domain.com</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col-2 column">
+      <ul>
+        <li>
+          <a href="https://github.com/songxincun">
+            <span class="icon github">
+              <svg version="1.1" class="github-icon-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#C2C2C2" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761
+                c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32
+                c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472
+                c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037
+                C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65
+                c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261
+                c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082
+                c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129
+                c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <span class="username">songxincun</span>
+          </a>
+        </li>
+        
+      </ul>
+    </div>
+
+    <div class="footer-col-3 column">
+      <p class="text">记录思绪的点点滴滴</p>
+    </div>
+
+  </div>
+
+</footer>
+
+
+    </body>
+</html>

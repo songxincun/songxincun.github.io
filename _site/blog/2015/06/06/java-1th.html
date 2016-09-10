@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>第一章：Java语言概述与开发环境</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="description" content="记录思绪的点点滴滴">
+    <meta name="baidu-site-verification" content="CibWhF6Kxz" />
+    <meta name="google-site-verification" content="pi6a8hODkaYkCKbWh0HqCs2h1OFNs7yklG8wW-VC9Fs" />
+    <link rel="canonical" href="http://yourdomain.com/blog/2015/06/06/java-1th">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+
+</head>
+
+
+    <body>
+
+    <header class="site-header">
+
+  <div class="wrap">
+
+    <a class="site-title" href="/">像少年啦飞驰</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+           viewBox="0 0 18 15" enable-background="new 0 0 18 15" xml:space="preserve">
+          <path fill="#505050" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0
+            h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#505050" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484
+            h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#505050" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0
+            c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+      <div class="trigger">
+        
+          <a class="page-link" href="/java/">Java</a>
+        
+          <a class="page-link" href="/hadoop/">Hadoop</a>
+        
+          <a class="page-link" href="/hbase/">HBase</a>
+        
+          <a class="page-link" href="/about/">About</a>
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrap">
+      <div class="post">
+
+  <header class="post-header">
+    <h1>第一章：Java语言概述与开发环境</h1>
+    <p class="meta">Jun 6, 2015</p>
+  </header>
+
+  <article class="post-content">
+  <ul>
+  <li>1.4 之前 Java 版本号</li>
+  <li>Java SE: Java™ Platform, Standard Edition 7</li>
+  <li>JRE: Java SE Runtime Environment, Java 运行时环境，一个 Java 程序跑起来的最基本环境</li>
+  <li>JDK: Java SE Development Kit (JDK)：包含了所有的 Java 东西，包括编译器和打包器</li>
+  <li>JNI: Java Native Interface, Java 调用其他语言用到的东西</li>
+</ul>
+
+<p><img src="/images/java_conception.png" alt="Java conceptual" />
+<img src="/images/java_framwork.png" alt="Java framwork" /></p>
+
+<h2 id="java-">Java 目录结构</h2>
+<ul>
+  <li>bin: 存放 JDK 的各种工具命令，包括 javac、java 等</li>
+  <li>db: 安装 Java DB 的路径</li>
+  <li>include: 一些平台特定的头文件</li>
+  <li>jre: 运行 Java 程序所必须的 JRE 环境</li>
+  <li>lib: JDK 工具命令(bin 目录下的那些) 的实际执行程序(jar 包等等)。其中 tools.jar 就包括 javac 的工具类</li>
+</ul>
+
+<h2 id="helloworldjava">HelloWorld.java</h2>
+<pre><code class="language-Java">public class HelloWorld
+{
+    public static void main(String[] args)
+    {   
+        System.out.println("Hello world!");
+    }   
+}
+</code></pre>
+
+<pre><code class="language-Java">package songxincun.github.io;
+
+public class HelloWorld
+{
+    public static void main(String[] args)
+    {   
+        System.out.println("Hello world!");
+    }   
+}
+</code></pre>
+<p>如果执行命令
+<code class="highlighter-rouge">javac ./HelloWorld.java</code>
+则上面两段代码都只会在本地目录生成 HelloWorld.class 文件但是第一段代码能正常执行，而第二段代码执行时会提示：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Exception in thread "main" java.lang.NoClassDefFoundError: HelloWorld (wrong name: songxincun/github/io/HelloWorld)
+	at java.lang.ClassLoader.defineClass1(Native Method)
+	at java.lang.ClassLoader.defineClassCond(ClassLoader.java:631)
+	at java.lang.ClassLoader.defineClass(ClassLoader.java:615)
+	at java.security.SecureClassLoader.defineClass(SecureClassLoader.java:141)
+	at java.net.URLClassLoader.defineClass(URLClassLoader.java:283)
+	at java.net.URLClassLoader.access$000(URLClassLoader.java:58)
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:197)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:190)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:306)
+	at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:301)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:247)
+Could not find the main class: HelloWorld.  Program will exit.
+</code></pre>
+</div>
+
+<p>如果执行命令
+<code class="highlighter-rouge">javac ./HelloWorld.java -d .</code>
+则第一段代码会在本地生成 HelloWorld.class, 而第二段代码则会生成 songxincun/github/io/HelloWorld.class
+第一段代码需要执行：<code class="highlighter-rouge">java HelloWorld</code>
+第二段代码则需要执行：
+<code class="highlighter-rouge">java songxincun/github/io/HelloWorld</code> 或 <code class="highlighter-rouge">java songxincun.github.io.HelloWorld</code></p>
+
+<h2 id="classpath">CLASSPATH</h2>
+<p>前面执行 HelloWorld 程序的时候，java 会自动的去本地找到 HelloWorld 这个类
+而实际上这一动作是通过将当前路径添加到 CLASSPATH 环境变量实现的
+另外编译执行 java 程序的时候还需要依赖的 jar 包包括：dt.jar 和 tools.jar
+除了 CLASSPATH 环境变量，也可以在执行 java 命令的时候加上 -classpath 或 -cp 参数来指定搜索 class 的目录或 zip/jar 文件 (多个路径用 ‘:’ 分隔)</p>
+
+<p><strong>注意：CLASSPATH 或 -classpath/-cp 指定目录的时候，指定的是去该目录下寻找 class 文件，而非 jar 文件，所以要想指定具体的某个 jar 文件 (去 jar 下面找某个 class)，需要直接指定到具体的 jar 包路径 (据说 1.7 之后支持通配符)</strong></p>
+
+<h2 id="java--1">Java 文件名规范</h2>
+<ul>
+  <li>如果一个 Java 源代码里面有某个 public 类，则要求该源代码文件名必须是该类名+.java。正因为如此，所以一个 java 文件里面只会有一个 public 类</li>
+  <li>一般建议一个文件里面只定义一个类，并且该类与文件同名 (针对非 public 类的情况)</li>
+</ul>
+
+
+  </article>
+
+</div>
+
+<div id="disqus_thread"></div>
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); 
+      
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+     
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'songxincun'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); 
+
+        s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+
+
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrap">
+
+    <h2 class="footer-heading">像少年啦飞驰</h2>
+
+    <div class="footer-col-1 column">
+      <ul>
+        <li>像少年啦飞驰</li>
+        <li><a href="mailto:your-email@domain.com">your-email@domain.com</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col-2 column">
+      <ul>
+        <li>
+          <a href="https://github.com/songxincun">
+            <span class="icon github">
+              <svg version="1.1" class="github-icon-svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                 viewBox="0 0 16 16" enable-background="new 0 0 16 16" xml:space="preserve">
+                <path fill-rule="evenodd" clip-rule="evenodd" fill="#C2C2C2" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761
+                c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32
+                c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472
+                c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037
+                C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65
+                c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261
+                c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082
+                c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129
+                c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+              </svg>
+            </span>
+            <span class="username">songxincun</span>
+          </a>
+        </li>
+        
+      </ul>
+    </div>
+
+    <div class="footer-col-3 column">
+      <p class="text">记录思绪的点点滴滴</p>
+    </div>
+
+  </div>
+
+</footer>
+
+
+    </body>
+</html>
