@@ -69,7 +69,17 @@ categories:
 就可以了
 
 - 内外 ssh 到外网是有防火墙的，需要配置代理，具体参看内外文章
-- Jekyll 插件有一个 nodejs 的问题，就是 build.coffee 文件里面是用 childProcess.spawn 来执行 jekyll build 命令的，而这个方法在 windows 下面按它的方法有一些问题，所以得改成 childProcess.exec 然后就可以了
+- Jekyll 插件有一个 nodejs 的问题，就是 build.coffee 文件里面是用 childProcess.spawn 来执行 jekyll build 命令的，而这个方法在 windows 下面按它的方法有一些问题（可以 google 一下 childProcess.spawn 和 childProcess.exec 的区别），所以在配置 Build Command 的时候要配置成：
+
+```
+cmd.exe, /c, C:\RailsInstaller\Ruby2.1.0\bin\jekyll, build
+```
+除此之外，build.coffee 文件里面，要改成：
+
+``` coffee
+buildCommand = process.jekyllAtom.buildCommand
+#buildCommand = (process.jekyllAtom.config?.atom?.buildCommand || process.jekyllAtom.buildCommand)
+```
 
 
 
