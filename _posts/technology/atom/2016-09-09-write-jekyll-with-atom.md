@@ -77,7 +77,5 @@ categories:
   #buildCommand = (process.jekyllAtom.config?.atom?.buildCommand || process.jekyllAtom.buildCommand)
   ```
 
-
-
 [jekyll-gh]: https://github.com/jekyll/jekyll
 [jekyll]:    http://jekyllrb.com
