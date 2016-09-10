@@ -70,7 +70,7 @@ categories:
 就可以了
 
 - 内外 ssh 到外网是有防火墙的，需要配置代理，具体参看内外文章
-- Jekyll 插件
+- Jekyll 插件有一个 nodejs 的问题，就是 build.coffee 文件里面是用 childProcess.spawn 来执行 jekyll build 命令的，而这个方法在 windows 下面是不可用的，所以得改成 childProcess.exec 然后就可以了
 
 
 
