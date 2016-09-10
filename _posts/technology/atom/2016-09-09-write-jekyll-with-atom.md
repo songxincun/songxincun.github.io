@@ -72,11 +72,10 @@ categories:
   cmd.exe, /c, C:\RailsInstaller\Ruby2.1.0\bin\jekyll, build
   ```
 除此之外，build.coffee 文件里面，要改成：
-
-``` coffee
-buildCommand = process.jekyllAtom.buildCommand
-#buildCommand = (process.jekyllAtom.config?.atom?.buildCommand || process.jekyllAtom.buildCommand)
-```
+  ``` coffee
+  buildCommand = process.jekyllAtom.buildCommand
+  #buildCommand = (process.jekyllAtom.config?.atom?.buildCommand || process.jekyllAtom.buildCommand)
+  ```
 
 
 
