@@ -50,6 +50,7 @@ categories:
           else
             [@command]
         ```
+        
 改成
 ``` coffee
   getArgs: ->
