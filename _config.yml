@@ -2,7 +2,7 @@
 title: 像少年啦飞驰
 email: your-email@domain.com
 description: "记录思绪的点点滴滴"
-baseurl: "_site"
+baseurl: "/_site"
 url: "http://songxincun.github.io/"
 github_username:  songxincun
 
