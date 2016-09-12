@@ -25,7 +25,7 @@ module.exports = class Syncer
     ).then( (filenames) =>
       if 0 == filenames.length
         atom.notifications.addInfo('No need to change!')
-        throw @NO_NEED_TO_CHANGE
+        #throw @NO_NEED_TO_CHANGE
       @makeRunner(cwd, "git", ["commit", "-m", @createCommitMessage(filenames)]).run()
 
       atom.notifications.addSuccess('commit files: ' + filenames)
