@@ -69,7 +69,7 @@
   </header>
 
   <article class="post-content">
-  <h3 id="section">参考指南：</h3>
+  <h3 id="section">命令行批量操作：</h3>
 <div class="language-bash highlighter-rouge"><pre class="highlight"><code>/data/hbaseadmin/bigsong/ansible-2.1.0.0/bin/ansible    <span class="se">\</span>
             -i <span class="s2">"</span><span class="k">${</span><span class="nv">ANSIBLE_HOST_FILE</span><span class="k">}</span><span class="s2">"</span> all           <span class="se">\</span>
             -f 20                                       <span class="se">\</span>
@@ -95,6 +95,8 @@
 </div>
 
 <p>上面两个不同的 ansible 分别用了两个不同的模块来实现不同的功能（通过 -m 参数来指定），其中 copy 用来完成文件分发的功能，而 command 用来执行命令操作。另外就是如果想用 command 来执行具体的 shell 命令，需要直接指定命令的全路径，或者是用 <code class="highlighter-rouge">bash -c</code> 的方式来指定</p>
+
+<h3 id="playbook">PlayBook</h3>
 
 
   </article>
