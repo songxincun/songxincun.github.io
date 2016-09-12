@@ -30,7 +30,8 @@ ANSIBLE_ARGV="start_time='${STARTTIME}'
               print_pattern='${PRINTPATTERN}'"
 ```
 
-上面两个不同的 ansible 分别用了两个不同的模块来实现不同的功能（通过 -m 参数来指定），其中 copy 用来完成文件分发的功能，而 command 用来执行命令操作。另外就是如果想用 command 来执行具体的 shell 命令，需要直接指定命令的全路径，或者是用 `bash -c` 的方式来指定 
+上面两个不同的 ansible 分别用了两个不同的模块来实现不同的功能（通过 -m 参数来指定），其中 copy 用来完成文件分发的功能，而 command 用来执行命令操作。另外就是如果想用 command 来执行具体的 shell 命令，需要直接指定命令的全路径，或者是用 `bash -c` 的方式来指定
+d
 
 ### PlayBook
 
