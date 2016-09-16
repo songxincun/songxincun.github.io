@@ -10,4 +10,4 @@ date: "2016-09-12 19:51:20 +0800"
 - `markdown-writer` `tool-bar` `tool-bar-markdown-writer` 用于可视化编写 markdown
 - `sync-on-save` 用来一键 add all 然后 commit
 - `git-plus` 用来将 `sync-on-save` commit 后的文章 push 到 Github
-- 
+- 和力量
