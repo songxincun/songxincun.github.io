@@ -87,10 +87,187 @@
 </ul>
 
 <h2 id="major-compaction-">Major Compaction 优化</h2>
+<p>系统默认的 Major Compaction 是每天做一次，这个值是由参数 <em>hbase.hregion.majorcompaction</em> 来配置的。也可以通过 major_compact 命令来手动对某个 region 执行 Major Compaction</p>
+
+<p>由于 Major Compaction 比较粗暴简单，在一些比较大的业务的情况下会对 IO 和网络造成极大的影响和浪费。因此一般对线上业务会将系统自动的 Major Compaction 关掉，转而通过一些业务定制化的 Compaction 方案来对 HFile 进行合并</p>
 
 <h2 id="minor-compaction-">Minor Compaction 优化</h2>
 
-<h2 id="section">注意事项</h2>
+<blockquote>
+  <p>核心思路：定期对 region 下所有的 HFile 做 check，排除掉过大的（算法 1）和正在做 compaction 的 HFile，选取剩下的符合要求的 HFile 里的一部分做合并</p>
+</blockquote>
+
+<p>Minor Compaction 里面最核心的算法就是如何选取合适的 HFile 来进行 compact，需要排除掉太大的 HFile，HFile 太大会影响系统性能，导致 IO、网络浪费。HFile 的个数也不宜太多。同时还要考虑多个 compact 任务之间的优先级</p>
+
+<h4 id="section">基本配置：</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数名</th>
+      <th>配置项</th>
+      <th>默认值</th>
+      <th>线上值</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>minFilesToCompact</td>
+      <td>hbase.hstore.compaction.min</td>
+      <td>3</td>
+      <td>10</td>
+      <td>至少有这么多个满足条件的 StoreFile，Minor Compaction 才会启动</td>
+    </tr>
+    <tr>
+      <td>maxFilesToCompact</td>
+      <td>hbase.hstore.compaction.max</td>
+      <td>10</td>
+      <td>25</td>
+      <td>一次 Minor Compaction 最多选这么多个 StoreFile</td>
+    </tr>
+    <tr>
+      <td>maxCompactSize</td>
+      <td>hbase.hstore.compaction.max.size</td>
+      <td>Long.MAX_VALUE</td>
+      <td>4294967296 (4G)</td>
+      <td>文件大小大于该值的 StoreFile 一定会被 Minor Compaction排除</td>
+    </tr>
+    <tr>
+      <td>minCompactSize</td>
+      <td>hbase.hstore.compaction.min.size</td>
+      <td>memstoreFlushSize</td>
+      <td>默认值</td>
+      <td>文件大小小于该值的 StoreFile 一定会加入到 Minor compaction</td>
+    </tr>
+    <tr>
+      <td>threadWakeFrequency</td>
+      <td>hbase.server.thread.wakefrequency</td>
+      <td>10000</td>
+      <td>100</td>
+      <td>Compaction Checker 周期</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>hbase.regionserver.thread.compaction.large</td>
+      <td>1</td>
+      <td>1</td>
+      <td>配置 largeCompactions 线程池的线程个数</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>hbase.regionserver.thread.compaction.small</td>
+      <td>1</td>
+      <td>1</td>
+      <td>配置 smallCompactions 线程池的线程个数</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>hbase.regionserver.thread.compaction.throttle</td>
+      <td> </td>
+      <td>8589934592 (8G)</td>
+      <td>待补充</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>hbase.hstore.compaction.ratio</td>
+      <td> </td>
+      <td>3</td>
+      <td>待补充</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>CompactionChecker 是 RS 上的工作线程（Chore），设置执行周期是通过 threadWakeFrequency 指定，大小通过 hbase.server.thread.wakefrequency 配置（默认 10000），然后乘以默认倍数 multiple （1000），毫秒时间转换为秒。因此，在不做参数修改的情况下，CompactionChecker 大概是 2hrs, 46mins, 40sec 执行一次。</p>
+
+<p>首先，对于 HRegion 里的每个 HStore 进行一次判断，needsCompaction() 判断是否足够多的文件触发了 Compaction 的条件。</p>
+
+<p>条件为：HStore 中 StoreFIles 的个数 – 正在执行 Compacting 的文件个数 &gt; minFilesToCompact</p>
+
+<p>操作：以最低优先级提交 Compaction 申请</p>
+
+<h4 id="off-peak-">Off-Peak 配置：</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数名</th>
+      <th>配置项</th>
+      <th>默认值</th>
+      <th>线上值</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>hbase.offpeak.start.hour</td>
+      <td> </td>
+      <td>1</td>
+      <td>待补充</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>hbase.offpeak.end.hour</td>
+      <td> </td>
+      <td>6</td>
+      <td>待补充</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>hbase.hstore.compaction.ratio.offpeak</td>
+      <td> </td>
+      <td>5.0</td>
+      <td>待补充</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>hbase.hstore.majorCompaction.peak.enable</td>
+      <td> </td>
+      <td>true</td>
+      <td>待补充</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="peak-">Peak 配置：</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>参数名</th>
+      <th>配置项</th>
+      <th>默认值</th>
+      <th>线上值</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>hbase.peak.start.hour</td>
+      <td> </td>
+      <td>-1</td>
+      <td>待补充</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>hbase.peak.end.hour</td>
+      <td> </td>
+      <td>-1</td>
+      <td>待补充</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>hbase.regionserver.compaction.peak.maxspeed</td>
+      <td> </td>
+      <td>31457280</td>
+      <td>待补充</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-1">注意事项</h2>
 <p>meta 表的 compaction</p>
 
   </article>
