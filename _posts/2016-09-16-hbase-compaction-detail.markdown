@@ -100,6 +100,7 @@ compaction 的目的是为了控制 HFile 个数，减少数据冗余。所以�
    * TTL 优化：对于 TTL 过期的数据，可以直接删表，从而避免 Compaction 对系统 IO、网络造成的浪费
    * 对于冷数据可以定期在业务低峰期做一次 Major Compaction，然后后面就不需要管它。既可以获得最优读性能，又不需要反复的对不更新的数据做 Compaction
    * 建的表的规模更好控制，从而可以更准确的进行预分区，避免出现线上 region split 进而导致 Major Compaction 的情况
+   * 对于一些对存储空间有高利用率要求的业务，可以对冷数据表在 Major Compaction 之后做 hdfs 降副本操作，提高存储空间利用率
 
 
 ## 注意事项
