@@ -1,0 +1,17 @@
+---
+layout: "post"
+title: "hbase 二级缓存"
+date: "2016-09-20 19:29"
+categories:
+    -
+---
+
+```xml
+<name>hbase.bucketcache.ioengine</name>
+<value>offheap</value>
+<source>hbase-site.xml</source>
+```
+
+hbase.bucketcache.ioengine 可以配置二级缓存,可以配置: offheap(堆外缓存), ssd, heap
+
+1.2 可以配置表 enable 的时候,就加载到缓存里面去(热启动)
